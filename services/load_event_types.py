@@ -5,7 +5,7 @@ import django
 # أضف المسار إلى جذر المشروع حيث مجلد lyoumferhek
 sys.path.append(r'E:\LyoumFerhek')
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lyoumferhek.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 django.setup()
 
