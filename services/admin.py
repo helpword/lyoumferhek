@@ -6,6 +6,14 @@ from .models import (
     Order, OrderItem
 )
 
+# Titre principal en haut de la page d'administration
+admin.site.site_header = "Panneau d'administration Lyoum Ferhek"
+
+# Titre de l'onglet dans le navigateur
+admin.site.site_title = "Gestion du Lyoum Ferhek"
+
+# Titre de la page d'accueil du panneau d'administration
+admin.site.index_title = "Bienvenue dans le panneau d'administration Lyoum Ferhek"
 # Register your models here.
 admin.site.register(Client)
 admin.site.register(EventType)
