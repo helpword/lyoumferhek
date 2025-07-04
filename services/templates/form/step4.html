@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>الخطوة 4</title>
+</head>
+<body>
+    <h2>الخطوة 4: تأكيد البيانات</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">إنهاء</button>
+    </form>
+</body>
+</html>
