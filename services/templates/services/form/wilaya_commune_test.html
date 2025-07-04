@@ -1,0 +1,38 @@
+<!-- templates/form/wilaya_commune_test.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Wilaya & Commune</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Choisissez une wilaya et une commune</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Envoyer">
+    </form>
+
+    <script>
+      $(document).ready(function () {
+        $("#id_wilaya").change(function () {
+          var wilayaId = $(this).val();
+          $.ajax({
+            url: "{% url 'ajax_load_communes' %}",
+            data: {
+              'wilaya': wilayaId
+            },
+            success: function (data) {
+              $("#id_commune").html("");
+              $.each(data, function (key, value) {
+                $("#id_commune").append('<option value="' + value.id + '">' + value.name + '</option>');
+              });
+            }
+          });
+        });
+      });
+    </script>
+</body>
+</html>

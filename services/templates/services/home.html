@@ -1,27 +1,30 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Accueil - Lyoum Ferhek</title>
-    <link rel="stylesheet" href="{% static 'services/style.css' %}">
-</head>
-<body>
-    <h1>مرحبا بك في Lyoum Ferhek 🎉</h1>
+<!-- home.html -->
+<form method="post">
+    {% csrf_token %}
+    {{ step2form.as_p }}  <!-- هذا يعرض حقول wilaya و commune -->
 
-    {% if prestataires %}
-        <div class="prestataire-list">
-            {% for p in prestataires %}
-                <div class="prestataire-card">
-                    <h2>{{ p.nom }}</h2>
-                    <p>Type: {{ p.type_service.nom }}</p>
-                    <p>Prix: {{ p.prix_par_jour }} DA / jour</p>
-                    <p>Disponible: {% if p.disponible %}Oui{% else %}Non{% endif %}</p>
-                </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <p style="text-align: center;">لا يوجد مقدمي خدمات حاليا.</p>
-    {% endif %}
-</body>
-</html>
+    <input type="submit" value="التالي">
+</form>
+
+<!-- تأكد من أن jQuery موجود -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $("#id_wilaya").change(function () {
+      var wilayaId = $(this).val();
+      $.ajax({
+        url: "{% url 'load_communes' %}",
+        data: {
+          'wilaya': wilayaId
+        },
+        success: function (data) {
+          $("#id_commune").html("");
+          $.each(data, function (key, value) {
+            $("#id_commune").append('<option value="' + value.id + '">' + value.name + '</option>');
+          });
+        }
+      });
+    });
+  });
+</script>

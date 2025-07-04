@@ -17,7 +17,7 @@ class Client(models.Model):
         verbose_name_plural = "Clients"
 
 # -----------------------
-# Event & EventType
+# EventType فقط
 # -----------------------
 class EventType(models.Model):
     name = models.CharField(max_length=100)
@@ -29,18 +29,6 @@ class EventType(models.Model):
         verbose_name = "Event Type"
         verbose_name_plural = "Event Types"
 
-class Event(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='events')
-    event_type = models.ForeignKey(EventType, on_delete=models.CASCADE)
-    date = models.DateField()
-    description = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return f"{self.event_type.name} for {self.client}"
-
-    class Meta:
-        ordering = ['-date']
-
 # -----------------------
 # Location: Wilaya & Commune
 # -----------------------
@@ -49,7 +37,7 @@ class Wilaya(models.Model):
     code = models.CharField(max_length=5)
 
     def __str__(self):
-        return f"{self.code} - {self.name}"
+        return f"{self.code.zfill(2)} - {self.name}"
 
     class Meta:
         verbose_name = "Wilaya"
@@ -69,14 +57,16 @@ class Commune(models.Model):
 # -----------------------
 # Event Location (Venue)
 # -----------------------
-class EventLocation(models.Model):
+class EventLocationType(models.Model):
     name = models.CharField(max_length=100)
-    address = models.TextField()
-    commune = models.ForeignKey(Commune, on_delete=models.SET_NULL, null=True, related_name='locations')
-    capacity = models.IntegerField()
-
+    
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = "Event Location Type"
+        verbose_name_plural = "Event Location Types"
+        ordering = ['name']
 
 # -----------------------
 # Services: Prestataire, Category, Service
@@ -116,7 +106,6 @@ class Service(models.Model):
 # -----------------------
 class Order(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='orders')
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='orders')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

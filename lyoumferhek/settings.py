@@ -56,7 +56,8 @@ ROOT_URLCONF = 'lyoumferhek.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'services' / 'templates'],  # هذا يكفي
+        'DIRS': [BASE_DIR / 'services' / 'templates'], 
+        'DIRS': [], # هذا يكفي
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

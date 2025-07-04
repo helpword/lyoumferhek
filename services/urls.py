@@ -8,4 +8,7 @@ urlpatterns = [
     path('step3/', views.step3_view, name='step3'),
     path('step4/', views.step4_view, name='step4'),
     path('complete/', views.form_complete_view, name='form_complete'),
+    path('ajax/load-communes/', views.load_communes, name='load_communes'),
+    path('test-wilaya-commune/', views.wilaya_commune_test, name='wilaya_commune_test'),
+    path('ajax/load-communes/', views.load_communes, name='ajax_load_communes'),
 ]

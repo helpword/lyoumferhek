@@ -1,19 +1,12 @@
-# forms.py
 from django import forms
-from .models import Prestataire, Client  # أزل TypeService و Reservation
-
+from .models import Prestataire, Client
+from services.models import Wilaya, Commune
 
 EVENT_CHOICES = [
     ('mariage', 'Mariage'),
     ('fiancailles', 'Fiançailles'),
     ('anniversaire', 'Anniversaire'),
     ('nouveau_ne', 'Nouveau-né'),
-]
-
-WILAYA_CHOICES = [
-    ('alger', 'Alger'),
-    ('oran', 'Oran'),
-    ('constantine', 'Constantine'),
 ]
 
 VENUE_CHOICES = [
@@ -34,7 +27,22 @@ class Step1Form(forms.Form):
 
 class Step2Form(forms.Form):
     date = forms.DateField(widget=forms.SelectDateWidget, label="Date de l'événement")
-    wilaya = forms.ChoiceField(choices=WILAYA_CHOICES, label="Wilaya")
+    wilaya = forms.ModelChoiceField(queryset=Wilaya.objects.order_by('code'), label="Wilaya")
+    commune = forms.ModelChoiceField(queryset=Commune.objects.none(), label="Commune")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['wilaya'].label_from_instance = lambda obj: f"{obj.code} - {obj.name}"
+        self.fields['commune'].label_from_instance = lambda obj: f"{obj.name}, {obj.wilaya.name}"
+
+class WilayaCommuneForm(forms.Form):
+    wilaya = forms.ModelChoiceField(queryset=Wilaya.objects.order_by('code'), label="Wilaya")
+    commune = forms.ModelChoiceField(queryset=Commune.objects.none(), label="Commune")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['wilaya'].label_from_instance = lambda obj: f"{obj.code} - {obj.name}"
+        self.fields['commune'].label_from_instance = lambda obj: f"{obj.name}, {obj.wilaya.name}"
 
 class Step3Form(forms.Form):
     lieu = forms.ChoiceField(choices=VENUE_CHOICES, label="Type de lieu")
@@ -46,4 +54,3 @@ class Step4Form(forms.Form):
         label="Services supplémentaires",
         required=False
     )
-
