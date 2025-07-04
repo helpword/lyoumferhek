@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>تم التسجيل</title>
+</head>
+<body>
+    <h2>تم إكمال التسجيل بنجاح!</h2>
+
+    <h3>ملخص البيانات:</h3>
+
+    <pre>
+        الخطوة 1:
+        {{ step1 }}
+
+        الخطوة 2:
+        {{ step2 }}
+
+        الخطوة 3:
+        {{ step3 }}
+
+        الخطوة 4:
+        {{ step4 }}
+    </pre>
+
+    <a href="{% url 'step1' %}">البدء من جديد</a>
+</body>
+</html>
