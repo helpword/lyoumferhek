@@ -1,0 +1,7 @@
+Django
+django-debug-toolbar
+django-extensions
+django-htmx
+pillow
+whitenoise
+pygraphviz
