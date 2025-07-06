@@ -1,5 +1,10 @@
 from django.http import JsonResponse
 from .models import Client
+from django.shortcuts import render
+
+def home(request):
+    return render(request, 'home.html')
+
 
 def client_list(request):
     clients = list(Client.objects.values())

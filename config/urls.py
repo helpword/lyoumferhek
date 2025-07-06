@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.urls import path, include
+from apps.client import views
+
 
 urlpatterns = [
+    path('', views.home, name='home'),
     path('admin/', admin.site.urls),
-
+    
     path('client/', include('apps.client.urls')),
     path('commune/', include('apps.commune.urls')),
     path('event/', include('apps.event.urls')),

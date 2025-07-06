@@ -7,11 +7,6 @@ from .models import (
     Event, EventItem
 )
 
-from django.contrib import admin
-admin.site.site_header = "Lyoum Ferhek administration"
-admin.site.site_title = "Lyoum Ferhek Admin"
-admin.site.index_title = "Lyoum Ferhek Control Panel"
-
 
 
 @admin.register(Commune)
