@@ -8,9 +8,9 @@ from .models import (
 )
 
 from django.contrib import admin
-admin.site.site_header = "Lyoum Ferhek Administration"
-admin.site.site_title = "Lyoum Ferhek Admin "
-admin.site.index_title = "Welcome to Lyoum Ferhek"
+admin.site.site_header = "Lyoum Ferhek administration"
+admin.site.site_title = "Lyoum Ferhek Admin"
+admin.site.index_title = "Lyoum Ferhek Control Panel"
 
 
 
