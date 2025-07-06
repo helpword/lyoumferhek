@@ -1,10 +1,8 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import Prestataire
-from .forms import Step1Form, Step2Form, Step3Form, Step4Form
 from django.http import JsonResponse
-from .forms import WilayaCommuneForm
-from .models import Commune
+from apps.prestataire.models import Prestataire
+from apps.commune.models import Commune
+from .forms import WilayaCommuneForm, Step1Form, Step2Form, Step3Form, Step4Form
 
 def redirect_to_step1(request):
     return redirect('step1')
@@ -70,8 +68,3 @@ def form_complete_view(request):
         'step4': request.session.get('step4'),
     }
     return render(request, 'form/complete.html', data)
-
-def load_communes(request):
-    wilaya_id = request.GET.get('wilaya')
-    communes = Commune.objects.filter(wilaya_id=wilaya_id).values('id', 'name')
-    return JsonResponse(list(communes), safe=False)

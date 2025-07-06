@@ -1,6 +1,8 @@
 from django import forms
-from .models import Prestataire, Client
-from .models import Wilaya, Commune
+from apps.prestataire.models import Prestataire
+from apps.client.models import Client
+from apps.wilaya.models import Wilaya
+from apps.commune.models import Commune
 
 EVENT_CHOICES = [
     ('mariage', 'Mariage'),
