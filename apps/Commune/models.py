@@ -3,16 +3,18 @@ from apps.wilaya.models import Wilaya
 
 
 class Commune(models.Model):
-    wilaya      = models.ForeignKey(Wilaya, on_delete=models.CASCADE, related_name='communes')
-    name        = models.CharField(max_length=100)
-    post_code   = models.CharField(max_length=6, blank=True, null=True)
-    ar_name     = models.CharField(max_length=100, blank=True, null=True)
-    longitude   = models.FloatField(blank=True, null=True)
-    latitude    = models.FloatField(blank=True, null=True)
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255)
+    name_ar = models.CharField(max_length=255, blank=True, null=True)  # أضف هذا إن لم يكن موجودًا
+    postal_code = models.CharField(max_length=10, blank=True, null=True)  # وأيضًا هذا
+    wilaya = models.ForeignKey('wilaya.Wilaya', on_delete=models.CASCADE)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
     is_active   = models.BooleanField(default=True)
-
+    
     def __str__(self):
-        return f"{self.name}, {self.wilaya.name}"
+        return self.name
+
 
     class Meta:
         ordering = ['name']

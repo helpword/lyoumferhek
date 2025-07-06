@@ -4,8 +4,7 @@ from apps.prestataire.models import Prestataire
 from apps.commune.models import Commune
 from .forms import WilayaCommuneForm, Step1Form, Step2Form, Step3Form, Step4Form
 
-def home(request):
-    return render(request, 'templates/home.html')
+
 
 def redirect_to_step1(request):
     return redirect('step1')
