@@ -7,6 +7,10 @@ from .models import (
     Event, EventItem
 )
 
+from django.contrib import admin
+admin.site.site_header = "Lyoum Ferhek Administration"
+admin.site.site_title = "Lyoum Ferhek Admin "
+admin.site.index_title = "Welcome to Lyoum Ferhek"
 
 
 
