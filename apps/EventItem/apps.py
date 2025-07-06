@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class EventitemConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'EventItem'
+    name = 'apps.eventitem'

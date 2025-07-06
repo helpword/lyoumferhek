@@ -1,5 +1,6 @@
 from django.db import models
-from Wilaya.models import Wilaya
+from apps.wilaya.models import Wilaya
+
 
 class Commune(models.Model):
     wilaya      = models.ForeignKey(Wilaya, on_delete=models.CASCADE, related_name='communes')

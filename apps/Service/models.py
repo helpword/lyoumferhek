@@ -1,6 +1,6 @@
 from django.db import models
-from ServiceCategory.models import ServiceCategory
-from Prestataire.models import Prestataire
+from apps.prestataire.models import Prestataire
+from apps.servicecategory.models import ServiceCategory
 
 class Service(models.Model):
     name = models.CharField(max_length=100)

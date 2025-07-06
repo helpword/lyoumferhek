@@ -37,14 +37,27 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
+    # Internal apps
     'apps.users',
     'apps.services',
-    
+
+    'apps.client',
+    'apps.commune',
+    'apps.event',
+    'apps.eventitem',
+    'apps.eventtype',
+    'apps.prestataire',
+    'apps.service',
+    'apps.servicecategory',
+    'apps.wilaya',
+
+    # External packages
     'django_extensions',
-    "django_htmx",
-    
+    'django_htmx',
 ]
+
+
 
 
 MIDDLEWARE = [

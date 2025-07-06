@@ -1,7 +1,10 @@
 from django.db import models
-from Commune.models import Commune
-from Client.models import Client
-from EventType.models import EventType
+from apps.commune.models import Commune
+from apps.client.models import Client
+from apps.eventtype.models import EventType
+
+
+
 
 class Event(models.Model):
     commune = models.ForeignKey(Commune, on_delete=models.CASCADE, related_name='events')

@@ -1,6 +1,8 @@
 from django.db import models
-from Event.models import Event
-from Service.models import Service
+from apps.event.models import Event
+from apps.service.models import Service
+
+
 
 class EventItem(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='items')
