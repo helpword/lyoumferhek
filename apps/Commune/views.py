@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from django.http import JsonResponse
+from .models import Commune
 
-# Create your views here.
+def commune_list(request):
+    communes = list(Commune.objects.values())
+    return JsonResponse(communes, safe=False)

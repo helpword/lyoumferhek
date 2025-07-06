@@ -3,7 +3,14 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('apps.services.urls')),
+
+    path('client/', include('apps.client.urls')),
+    path('commune/', include('apps.commune.urls')),
+    path('event/', include('apps.event.urls')),
+    path('eventitems/', include('apps.eventitem.urls')),
+    path('eventtype/', include('apps.eventtype.urls')),
+    path('prestataire/', include('apps.prestataire.urls')),
+    path('service/', include('apps.service.urls')),
+    path('service-categories/', include('apps.servicecategory.urls')),
+    path('wilaya/', include('apps.wilaya.urls')),
 ]
-
-

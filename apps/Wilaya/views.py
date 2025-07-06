@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from django.http import JsonResponse
+from .models import Wilaya
 
-# Create your views here.
+def wilaya_list(request):
+    wilayas = list(Wilaya.objects.values())
+    return JsonResponse(wilayas, safe=False)

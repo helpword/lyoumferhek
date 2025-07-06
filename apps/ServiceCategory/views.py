@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from django.http import JsonResponse
+from .models import ServiceCategory
 
-# Create your views here.
+def service_category_list(request):
+    categories = list(ServiceCategory.objects.values())
+    return JsonResponse(categories, safe=False)

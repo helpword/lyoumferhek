@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from django.http import JsonResponse
+from .models import EventType
 
-# Create your views here.
+def event_type_list(request):
+    types = list(EventType.objects.values())
+    return JsonResponse(types, safe=False)
