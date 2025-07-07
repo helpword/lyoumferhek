@@ -41,15 +41,11 @@ INSTALLED_APPS = [
     # Internal apps
     'apps.users',
     
-    'apps.client',
-    'apps.event',
-    'apps.eventitem',
-    'apps.eventtype',
-    'apps.prestataire',
-    'apps.service',
-    'apps.servicecategory',
-    'apps.wilaya',
-    'apps.commune',
+    'apps.clients',
+    'apps.events',
+    'apps.prestataires',
+    'apps.services',
+    'apps.wilayas',
 
     # External packages
     'django_extensions',

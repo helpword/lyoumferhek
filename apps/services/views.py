@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from apps.prestataire.models import Prestataire
-from apps.commune.models import Commune
+from apps.prestataires.models import Prestataire
+from apps.wilayas.models import Commune
 from .forms import WilayaCommuneForm, Step1Form, Step2Form, Step3Form, Step4Form
 
 

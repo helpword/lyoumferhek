@@ -3,7 +3,7 @@ import subprocess
 from django.core.management.base import BaseCommand
 from django.conf import settings
 import json
-from apps.services.models import Commune, Wilaya
+from apps.wilayas.models import Commune, Wilaya
 from django.contrib.auth import get_user_model
 
 
@@ -14,7 +14,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('Starting project init process...'))
+
         subprocess.run('python manage.py migrate', shell=True, check=True)
+        
         self.create_superuser()
         self.load_wilayas()
         self.load_communes()
@@ -53,6 +55,7 @@ class Command(BaseCommand):
         ]
 
         Wilaya.objects.bulk_create(wilaya_objs, ignore_conflicts=True)
+
         # Here you would add the logic to load your locations
         # For example, you might read from a JSON file and create Location objects
         self.stdout.write(self.style.SUCCESS('Locations loaded successfully!'))
@@ -67,7 +70,7 @@ class Command(BaseCommand):
                 id=int(c['id']),
                 wilaya_id=int(c['wilaya_id']),
                 name=c['name'],
-                post_code=c.get('post_code', ''),
+                postal_code=c.get('postal_code', ''),
                 ar_name=c.get('ar_name', ''),
                 longitude=float(c.get('longitude', 0)),
                 latitude=float(c.get('latitude', 0)),
