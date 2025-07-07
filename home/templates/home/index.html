@@ -1,0 +1,80 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ليوم فرحك</title>
+<link rel="stylesheet" href="{% static 'home/style.css' %}" />
+</head>
+<body>
+  <header class="top-bar">
+    <div class="logo">
+      <img src="{% static 'home/logo.jpg' %}" alt="Logo">
+    </div>
+    <div class="lang-switch">
+      <a href="#" onclick="switchLang('ar')">ع</a> |
+      <a href="#" onclick="switchLang('fr')">Fr</a>
+    </div>
+    <nav>
+      <a href="#">إنشاء حساب</a>
+      <a href="#">مقدمي الخدمات</a>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <div class="hero-text">
+      <h1 data-ar="ليوم فرحك، <br> أسهل أسهل <br>وأجمل!" data-fr="Pour votre jour de joie, <br> plus simple <br> et plus fun !">
+        ليوم فرحك، <br> أسهل أسهل <br>وأجمل!
+      </h1>
+      <p data-ar="نظم حفلك بخطوات بسيطة ومقترحات تناسبك" data-fr="Organisez votre fête en quelques étapes simples et des suggestions adaptées">
+        نظم حفلك بخطوات بسيطة ومقترحات تناسبك
+      </p>
+      <a href="#" class="start-btn" data-ar="ابدأ الآن" data-fr="Commencer maintenant">ابدأ الآن</a>
+    </div>
+    <div class="hero-image">
+      <img src="{% static 'home/illustration.jpg' %}" alt="Illustration" />
+      
+    </div>
+  </main>
+
+  <section class="features">
+    <div class="feature">
+      <img src="{% static 'home/salle.jpg' %}" alt="Salle">
+      <div>
+        <div data-ar="قاعات وأماكن جذابة" data-fr="Salles et lieux magnifiques">قاعات وأماكن جذابة</div>
+      </div>
+    </div>
+    <div class="feature">
+      <img src="{% static 'home/camera.jpg' %}" alt="Camera" />
+      
+      <div>
+        <div data-ar="مصورين محترفين" data-fr="Photographes professionnels">مصورين محترفين</div>
+      </div>
+    </div>
+    <div class="feature">
+      <img src="{% static 'home/cake.jpg' %}" alt="Cake" />
+      <div>
+        <div data-ar="طباخين وحلويات" data-fr="Cuisiniers et pâtisseries">طباخين وحلويات</div>
+      </div>
+    </div>
+    <div class="feature">
+      <img src="{% static 'home/deco.jpg' %}" alt="Decoration" />
+      <div>
+        <div data-ar="ديكور وتزيين" data-fr="Décoration">ديكور وتزيين</div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function switchLang(lang) {
+      document.querySelectorAll('[data-ar]').forEach(el => {
+        el.innerHTML = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-fr');
+      });
+      document.body.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+      document.documentElement.lang = lang;
+    }
+  </script>
+</body>
+</html>
