@@ -1,0 +1,13 @@
+<!-- templates/clients/dashboard.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tableau de bord du client</title>
+</head>
+<body>
+    <h1>Bienvenue, {{ client.user.get_full_name }}</h1>
+    <p>Numéro de téléphone : {{ client.phone }}</p>
+    <p>Date de naissance : {{ client.birth_date }}</p>
+    <a href="/">Retour à la page d'accueil</a>
+</body>
+</html>

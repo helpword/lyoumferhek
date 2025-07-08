@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ليوم فرحك</title>
+  <title data-ar="ليوم فرحك" data-fr="Pour votre jour de joie">ليوم فرحك</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
   <link rel="stylesheet" href="{% static 'home/style.css' %}" />
 </head>
@@ -16,8 +16,10 @@
     </div>
     <div class="d-flex align-items-center">
       <nav class="me-3">
-        <a href="#">إنشاء حساب</a>
-        <a href="#">مقدمو الخدمات</a>
+        {% comment %} <a href="{% url 'client_dashboard' %}" data-ar="لوحة الزبون" data-fr="Tableau client">لوحة الزبون</a> {% endcomment %}
+        {% comment %} <a href="{% url 'prestataire_dashboard' %}" data-ar="لوحة مقدم الخدمة" data-fr="Tableau prestataire">لوحة مقدم الخدمة</a> {% endcomment %}
+        <a href="#" data-ar="إنشاء حساب" data-fr="Créer un compte">إنشاء حساب</a>
+        <a href="#" data-ar="مقدمو الخدمات" data-fr="Prestataires">مقدمو الخدمات</a>
       </nav>
       <div class="lang-switch">
         <a href="#" onclick="switchLang('ar')">ع</a> |
@@ -28,10 +30,10 @@
 
   <!-- قسم البطل -->
   <section class="hero">
-    <div class="container">
+    <div class="container text-center">
       <h1 data-ar="ليوم فرحك، أسهل وأجمل!" data-fr="Pour votre jour de joie, plus simple et plus fun !">ليوم فرحك، أسهل وأجمل!</h1>
       <p data-ar="نظم حفلك بخطوات بسيطة ومقترحات تناسبك" data-fr="Organisez votre fête en quelques étapes simples et des suggestions adaptées">نظم حفلك بخطوات بسيطة ومقترحات تناسبك</p>
-      <a href="#" class="start-btn" data-ar="ابدأ الآن" data-fr="Commencer maintenant">ابدأ الآن</a>
+      <a href="{% url 'client_dashboard' %}" class="start-btn" data-ar="ابدأ الآن" data-fr="Commencer maintenant">ابدأ الآن</a>
     </div>
   </section>
 
@@ -74,20 +76,22 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
   <!-- الفوتر -->
-  <footer>
-    <p>&copy; 2025 ليوم فرحك. جميع الحقوق محفوظة.</p>
-    <p><a href="#">سياسة الخصوصية</a> | <a href="#">اتصل بنا</a></p>
+  <footer class="text-center mt-4">
+    <p data-ar="&copy; 2025 ليوم فرحك. جميع الحقوق محفوظة." data-fr="&copy; 2025 Pour votre jour de joie. Tous droits réservés.">&copy; 2025 ليوم فرحك. جميع الحقوق محفوظة.</p>
+    <p>
+      <a href="#" data-ar="سياسة الخصوصية" data-fr="Politique de confidentialité">سياسة الخصوصية</a> |
+      <a href="#" data-ar="اتصل بنا" data-fr="Contactez-nous">اتصل بنا</a>
+    </p>
   </footer>
 
   <script>
     function switchLang(lang) {
-      document.querySelectorAll('[data-ar]').forEach(el => {
+      document.querySelectorAll('[data-ar], [data-fr]').forEach(el => {
         el.innerHTML = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-fr');
       });
       document.body.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');

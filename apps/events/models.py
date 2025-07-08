@@ -10,15 +10,20 @@ from apps.services.models import Service
 
 class EventType(models.Model):
     name = models.CharField(max_length=100)
+    name_ar = models.CharField(max_length=100, verbose_name="الاسم بالعربية", null=True, blank=True)
+    name_fr = models.CharField(max_length=100, verbose_name="Nom en français", null=True, blank=True)
+    
+
+
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     updated_at = models.DateTimeField(auto_now=True)
     description = models.TextField(blank=True, null=True)
     # slug = models.SlugField(unique=True)
 
-
     def __str__(self):
-        return self.name
+        return f"{self.name_ar} / {self.name_fr}"
 
     class Meta:
         verbose_name = "Event Type"

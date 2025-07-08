@@ -1,3 +1,4 @@
+from urllib import request
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -21,3 +22,5 @@ class Client(models.Model):
     class Meta:
         verbose_name = "Client"
         verbose_name_plural = "Clients"
+        
+    

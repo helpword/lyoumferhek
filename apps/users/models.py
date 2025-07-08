@@ -73,6 +73,15 @@ class User(AbstractUser, TimestampedModel):
     phone       = models.CharField(max_length=20, null=True, blank=True)
     address     = models.CharField(verbose_name=_("Address"), max_length=150, null=True, blank=True)
 
+    is_manager  = models.BooleanField(default=False)
+    is_client = models.BooleanField(default=False)
+    is_prestataire = models.BooleanField(default=False)
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = UserManager()
+
+    
+        
+
+

@@ -19,4 +19,4 @@ class EventItemAdmin(admin.ModelAdmin):
 
 @admin.register(EventType)
 class EventTypeAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name','name_ar', 'name_fr', 'created_at', 'updated_at')
