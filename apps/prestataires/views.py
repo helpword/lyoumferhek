@@ -1,6 +1,32 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Prestataire
+from django.shortcuts import render, redirect
+from .forms import PrestataireRegisterForm
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+
+
+def prestataire_login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request, email=email, password=password)
+        if user is not None and user.is_prestataire:
+            login(request, user)
+            return redirect('prestataire_dashboard')  # تأكد أن هذه الصفحة موجودة
+        else:
+            messages.error(request, 'Adresse e-mail ou mot de passe invalide.')
+    return render(request, 'prestataires/login.html')
+
+
+def prestataire_register_view(request):
+    form = PrestataireRegisterForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('login')  # أو إلى صفحة success
+    return render(request, 'prestataires/register.html', {'form': form})
+
 
 # عرض صفحة تفاصيل مقدم خدمة
 def prestataire_detail(request, pk):

@@ -1,7 +1,30 @@
 from django.http import JsonResponse
-from .models import Client
-from django.shortcuts import render
+from .forms import ClientRegisterForm
+from django.shortcuts import render , redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from .models import Client
+
+def client_login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request, email=email, password=password)
+        if user is not None and user.is_client:
+            login(request, user)
+            return redirect('client_dashboard')
+        else:
+            messages.error(request, 'Adresse e-mail ou mot de passe invalide.')
+    return render(request, 'clients/login.html')
+
+
+def client_register_view(request):
+    form = ClientRegisterForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('login')  # أو إلى صفحة success
+    return render(request, 'clients/register.html', {'form': form})
 
 def home(request):
     return render(request, 'home.html')

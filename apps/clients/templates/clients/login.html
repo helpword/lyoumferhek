@@ -1,0 +1,55 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Connexion Client</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Modal de Connexion Client -->
+<div class="modal fade" id="clientLoginModal" tabindex="-1" aria-labelledby="clientLoginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title" id="clientLoginModalLabel">Connexion Client</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+
+      <div class="modal-body">
+        <form method="POST" action="{% url 'client_login' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label">Adresse E-mail</label>
+            <input type="email" name="email" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Mot de passe</label>
+            <input type="password" name="password" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+        </form>
+
+        <div class="text-center mt-3">
+          <a href="{% url 'client_register' %}">Créer un compte client</a>
+        </div>
+
+        <div class="text-center mt-3">
+          <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger w-100">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" width="20" class="me-2" />
+            Connexion via Google
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>

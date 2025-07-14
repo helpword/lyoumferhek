@@ -4,7 +4,7 @@ from django.utils import timezone
 
 class Wilaya(models.Model):
     name        = models.CharField(max_length=100)
-    name_ar = models.CharField(max_length=255, null=True, blank=True)
+    ar_name = models.CharField(max_length=100)
     name_fr = models.CharField(max_length=255, null=True, blank=True)
     longitude   = models.FloatField(blank=True, null=True)
     latitude    = models.FloatField(blank=True, null=True)
@@ -29,10 +29,10 @@ class Wilaya(models.Model):
 class Commune(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
-    name_ar = models.CharField(max_length=255, null=True, blank=True)
+    ar_name = models.CharField(max_length=100, null=True, blank=True)
     name_fr = models.CharField(max_length=255, null=True, blank=True)
     zip_code = models.CharField(max_length=10, blank=True, null=True)
-    postal_code = models.CharField(max_length=10, blank=True, null=True)  # وأيضًا هذا
+    post_code = models.CharField(max_length=10)
     wilaya = models.ForeignKey(Wilaya, on_delete=models.CASCADE, related_name="communes")
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
@@ -43,7 +43,7 @@ class Commune(models.Model):
 
     
     def __str__(self):
-        return self.name_ar or self.name_fr or self.name
+        return self.ar_name or self.name_fr or self.name
 
 
     class Meta:
