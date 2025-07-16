@@ -1,5 +1,7 @@
 {% load static %}
-{% load socialaccount %}
+{% load account socialaccount %}
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -169,6 +171,26 @@
       <h1>Lyoum <span class="text-gradient">Ferhek</span></h1>
       <p>Organisez votre jour spécial sans effort. Trouvez les meilleurs
          prestataires pour votre événement de rêve.</p>
+         {% comment %} <form method="GET" action="{% url 'search_services' %}" class="d-flex flex-column flex-md-row gap-3 justify-content-center mt-4">
+  <select name="wilaya" class="form-select w-auto" required>
+    <option value="">Wilaya</option>
+    {% for wilaya in wilayas %}
+      <option value="{{ wilaya.id }}">{{ wilaya.name_ar }}</option>
+    {% endfor %}
+  </select>
+
+  <select name="commune" class="form-select w-auto" required>
+    <option value="">Commune</option>
+    {% for commune in communes %}
+      <option value="{{ commune.id }}">{{ commune.name_ar }}</option>
+    {% endfor %}
+  </select>
+
+  <button type="submit" class="btn btn-primary-custom">
+    <i class="bi bi-search"></i> Rechercher maintenant
+  </button> {% endcomment %}
+</form>
+
       <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
         <button type="button" class="btn btn-primary-custom d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#clientLoginModal">
           <i class="bi bi-calendar2-check-fill"></i>
@@ -216,33 +238,46 @@
       </div>
     </div>
   </div>
-
-  <!-- Prestataire Modal -->
+ 
+ <!-- Prestataire Modal -->
   <div class="modal fade" id="prestataireModal" tabindex="-1" aria-labelledby="prestataireModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content text-start">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="prestataireModalLabel">Espace prestataire</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-        </div>
-        <div class="modal-body">
-          <p class="mb-4">Accédez à votre espace prestataire ou créez un nouveau compte pour proposer vos services.</p>
-          <div class="d-grid gap-2">
-            <a href="{% url 'prestataire_login' %}" class="btn btn-outline-dark">
-              <i class="bi bi-box-arrow-in-right me-1"></i> Se connecter
-            </a>
-            <a href="{% url 'prestataire_register' %}" class="btn btn-primary">
-              <i class="bi bi-person-plus me-1"></i> Créer un compte
-            </a>
-            <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" width="20" class="me-2" />
-              Se connecter avec Google
-            </a>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-start">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="prestataireModalLabel">Connexion Prestataire</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body">
+
+        <!-- FORMULAIRE DE CONNEXION -->
+        <form method="POST" action="{% url 'prestataire_login' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label">Adresse E-mail</label>
+            <input type="email" name="email" class="form-control" required>
           </div>
+          <div class="mb-3">
+            <label class="form-label">Mot de passe</label>
+            <input type="password" name="password" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+        </form>
+
+        <div class="text-center mt-3">
+          <a href="{% url 'prestataire_register' %}" class="text-decoration-none">Créer un compte prestataire</a>
         </div>
+
+        <div class="text-center mt-3">
+          <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger w-100">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" width="20" class="me-2" />
+            Se connecter avec Google
+          </a>
+        </div>
+
       </div>
     </div>
   </div>
+</div>
   <section class="py-5 bg-white">
   <div class="container text-center">
     <h2 class="fw-bold mb-3 text-gradient" style="font-size: 2.5rem;">
@@ -508,6 +543,17 @@
     <p class="mb-0 small text-muted">&copy; 2025 Lyoum Ferhek. Tous droits réservés.</p>
   </div>
 </footer>
+<!-- Modal: Créer un compte client -->
+<div class="modal fade" id="clientRegisterModal" tabindex="-1" aria-labelledby="clientRegisterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body" id="clientRegisterContent">
+        <!-- سيتم تحميل الفورم هنا عبر AJAX -->
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -515,6 +561,177 @@
 
   <!-- JS Bootstrap -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const modal = document.getElementById('clientRegisterModal');
+  modal.addEventListener('show.bs.modal', function () {
+    fetch("{% url 'client_register' %}")
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('clientRegisterContent').innerHTML = html;
+      });
+  });
+});
+</script>
+<script>
+  // دالة للحصول على الـ CSRF token من الكوكيز
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  const csrftoken = getCookie('csrftoken');
+
+  // تحميل نموذج تسجيل الزبون عند فتح الـ Modal
+  document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('clientRegisterModal');
+    modal.addEventListener('show.bs.modal', function () {
+      fetch("{% url 'client_register' %}", {
+        method: 'GET',
+        headers: {
+          'X-CSRFToken': csrftoken  // تم إضافة الـ CSRF هنا
+        }
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Erreur de chargement du formulaire.');
+        return response.text();
+      })
+      .then(html => {
+        document.getElementById('clientRegisterContent').innerHTML = html;
+      })
+      .catch(error => {
+        document.getElementById('clientRegisterContent').innerHTML =
+          "<p class='text-danger'>Une erreur s'est produite. Veuillez réessayer plus tard.</p>";
+      });
+    });
+  });
+</script>
+<script>
+  document.querySelector('select[name="wilaya"]').addEventListener('change', function () {
+    const wilayaId = this.value;
+    const communeSelect = document.querySelector('select[name="commune"]');
+
+    // تفريغ البلديات القديمة
+    communeSelect.innerHTML = '<option value="">Chargement...</option>';
+
+    fetch(`/get_communes/?wilaya_id=${wilayaId}`)
+      .then(response => response.json())
+      .then(data => {
+        communeSelect.innerHTML = '<option value="">Commune</option>';
+        data.forEach(commune => {
+          communeSelect.innerHTML += `<option value="${commune.id}">${commune.name_ar}</option>`;
+        });
+      })
+      .catch(error => {
+        communeSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+      });
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const wilayaSelect = document.querySelector('select[name="wilaya"]');
+    const communeSelect = document.querySelector('select[name="commune"]');
+
+    wilayaSelect.addEventListener('change', function () {
+      const wilayaId = this.value;
+
+      // تنظيف قائمة البلديات القديمة
+      communeSelect.innerHTML = '<option value="">Commune</option>';
+
+      if (wilayaId) {
+        fetch(`/get_communes/?wilaya_id=${wilayaId}`)
+          .then(response => response.json())
+          .then(data => {
+            data.forEach(commune => {
+              const option = document.createElement('option');
+              option.value = commune.id;
+              option.textContent = commune.ar_name;  // ← هذا السطر هنا
+              communeSelect.appendChild(option);
+            });
+          })
+          .catch(error => {
+            console.error('Erreur lors du chargement des communes:', error);
+          });
+      }
+    });
+  });
+</script>
+...
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const wilayaSelect = document.querySelector('select[name="wilaya"]');
+    const communeSelect = document.querySelector('select[name="commune"]');
+
+    wilayaSelect.addEventListener('change', function () {
+      const wilayaId = this.value;
+
+      // تنظيف قائمة البلديات القديمة
+      communeSelect.innerHTML = '<option value="">Commune</option>';
+
+      if (wilayaId) {
+        fetch(`/get_communes/?wilaya_id=${wilayaId}`)
+          .then(response => response.json())
+          .then(data => {
+            data.forEach(commune => {
+              const option = document.createElement('option');
+              option.value = commune.id;
+              option.textContent = commune.ar_name;  // ✅ التعديل هنا
+              communeSelect.appendChild(option);
+            });
+          })
+          .catch(error => {
+            console.error('Erreur lors du chargement des communes:', error);
+          });
+      }
+    });
+  });
+</script>
+...
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const wilayaSelect = document.querySelector('select[name="wilaya"]');
+    const communeSelect = document.querySelector('select[name="commune"]');
+
+    wilayaSelect.addEventListener('change', function () {
+      const wilayaId = this.value;
+
+      // تنظيف قائمة البلديات القديمة
+      communeSelect.innerHTML = '<option value="">Commune</option>';
+
+      if (wilayaId) {
+        fetch(`/get_communes/?wilaya_id=${wilayaId}`)
+          .then(response => response.json())
+          .then(data => {
+            data.forEach(commune => {
+              const option = document.createElement('option');
+              option.value = commune.id;
+              option.textContent = commune.ar_name;  // ✅ التعديل هنا
+              communeSelect.appendChild(option);
+            });
+          })
+          .catch(error => {
+            console.error('Erreur lors du chargement des communes:', error);
+          });
+      }
+    });
+  });
+</script>
+...
+
+
+</script>
+
+
 
 </body>
 </html>

@@ -1,13 +1,108 @@
-<!-- templates/clients/dashboard.html -->
+{% load static %}
+{% if reservations %}
+
 <!DOCTYPE html>
-<html>
+<html lang="fr" dir="ltr">
 <head>
-    <title>Tableau de bord du client</title>
+    <meta charset="UTF-8">
+    <title>Tableau de bord - Client</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: 'Cairo', sans-serif;
+        }
+        .main-color {
+            background-color: #ff3366 !important;
+        }
+        .secondary-color {
+            background-color: #cdcdcd !important;
+        }
+        .text-main {
+            color: #ff3366;
+        }
+        .text-secondary {
+            color: #cdcdcd;
+        }
+        .card {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: none;
+        }
+        .confirmed {
+            color: green;
+            font-weight: bold;
+        }
+        .pending {
+            color: orange;
+            font-weight: bold;
+        }
+        a.btn-custom {
+            border: 1px solid #ff3366;
+            color: #ff3366;
+        }
+        a.btn-custom:hover {
+            background-color: #ff3366;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <h1>Bienvenue, {{ client.user.get_full_name }}</h1>
-    <p>Numéro de téléphone : {{ client.phone }}</p>
-    <p>Date de naissance : {{ client.birth_date }}</p>
-    <a href="/">Retour à la page d'accueil</a>
+<div class="container py-5">
+    <div class="text-center mb-4">
+        <h2 class="text-main">Bienvenue, {{ request.user.first_name }}</h2>
+        <p>Voici votre espace personnel.</p>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header main-color text-white">
+            Informations personnelles
+        </div>
+        <div class="card-body">
+            <p><strong>Nom complet :</strong> {{ request.user.get_full_name }}</p>
+            <p><strong>Email :</strong> {{ request.user.email }}</p>
+            <a href="{% url 'account_change' %}" class="btn btn-custom">Modifier les informations</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header text-white" style="background-color: #444;">
+            Vos réservations
+        </div>
+        <div class="card-body">
+            {% if reservations %}
+                <table class="table">
+                    <thead class="secondary-color">
+                        <tr>
+                            <th>Date</th>
+                            <th>Type d'événement</th>
+                            <th>Lieu</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reservation in reservations %}
+                            <tr>
+                                <td>{{ reservation.date }}</td>
+                                <td>{{ reservation.event_type.name }}</td>
+                                <td>{{ reservation.commune.name }}</td>
+                                <td>
+                                    {% if reservation.confirmed %}
+                                        <span class="confirmed">Confirmée</span>
+                                    {% else %}
+                                        <span class="pending">En attente</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Aucune réservation pour le moment.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>

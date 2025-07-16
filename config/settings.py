@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'crispy_forms',
     
 
     # Internal apps
@@ -163,9 +164,10 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-LOGIN_REDIRECT_URL = '/'  # أو إلى صفحة معينة
+LOGIN_REDIRECT_URL = '/client/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 SOCIALACCOUNT_QUERY_EMAIL = True
 SITE_ID = 1  # ضروري لـ allauth
+CRISPY_TEMPLATE_PACK = 'bootstrap4'  

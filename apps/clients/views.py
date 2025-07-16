@@ -5,6 +5,29 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from .models import Client
+from django.shortcuts import render
+from apps.services.models import Service, ServiceCategory
+from apps.wilayas.models import Wilaya, Commune
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import login as auth_login
+from apps.events.models import Reservation  # أو المسار الصحيح للموديل
+
+@login_required
+def client_dashboard(request):
+    user = request.user
+    try:
+        client = user.client_profile
+    except Client.DoesNotExist:
+        return JsonResponse({'error': 'Client profile not found'}, status=404)
+
+    reservations = Reservation.objects.filter(client=client).select_related('event_type', 'commune')
+
+    return render(request, 'client/dashboard.html', {
+        'client': client,
+        'reservations': reservations
+    })
+
+
 
 def client_login_view(request):
     if request.method == 'POST':
@@ -22,8 +45,9 @@ def client_login_view(request):
 def client_register_view(request):
     form = ClientRegisterForm(request.POST or None)
     if form.is_valid():
-        form.save()
-        return redirect('login')  # أو إلى صفحة success
+        user = form.save()
+        auth_login(request, user)  # ✅ تسجيل الدخول تلقائياً
+        return redirect('client_dashboard')  # ✅ التوجيه إلى /client/dashboard/
     return render(request, 'clients/register.html', {'form': form})
 
 def home(request):
@@ -44,11 +68,69 @@ def client_detail(request, pk):
     except Client.DoesNotExist:
         return JsonResponse({"error": "Client not found"}, status=404)
 
+from apps.events.models import Reservation  # أو المسار الصحيح للموديل
+
 @login_required
 def client_dashboard(request):
     user = request.user
-    if hasattr(user, 'client_profile'):
+    try:
         client = user.client_profile
-        return render(request, 'clients/dashboard.html', {'client': client})
-    else:
-        return JsonResponse({"error": "Client profile not found"}, status=404)
+    except Client.DoesNotExist:
+        return JsonResponse({'error': 'Client profile not found'}, status=404)
+
+    reservations = Reservation.objects.filter(client=client).select_related('event_type', 'commune')
+
+    return render(request, 'clients/dashboard.html', {
+        'client': client,
+        'reservations': reservations
+    })
+
+
+    
+def client_register_view(request):
+    form = ClientRegisterForm(request.POST or None)
+    if form.is_valid():
+        user = form.save()  # يحفظ المستخدم
+        Client.objects.create(user=user, phone=form.cleaned_data['phone'])  # ينشئ ملف Client
+
+        login(request, user)  # تسجيل دخول مباشرة إن أردت
+        return redirect('client_dashboard')  # أو أي صفحة نجاح
+    return render(request, 'clients/register.html', {'form': form})
+
+
+def search_services(request):
+    wilayas = Wilaya.objects.all()
+    communes = Commune.objects.all()
+    categories = ServiceCategory.objects.all()
+
+    services = Service.objects.all()
+
+    wilaya_id = request.GET.get('wilaya')
+    commune_id = request.GET.get('commune')
+    category_id = request.GET.get('category')
+
+    if wilaya_id:
+        services = services.filter(commune__wilaya_id=wilaya_id)
+        communes = Commune.objects.filter(wilaya_id=wilaya_id)  # لتحديث القائمة
+    if commune_id:
+        services = services.filter(commune_id=commune_id)
+    if category_id:
+        services = services.filter(category_id=category_id)
+
+    return render(request, 'client/search.html', {
+        'wilayas': wilayas,
+        'communes': communes,
+        'categories': categories,
+        'services': services
+    })
+
+
+def client_dashboard(request):
+    user = request.user
+    try:
+        client = user.client_profile
+    except Client.DoesNotExist:
+        return JsonResponse({'error': 'Client profile not found'}, status=404)
+
+    # تابع العرض عادي هنا
+    return render(request, 'client/dashboard.html', {'client': client})    

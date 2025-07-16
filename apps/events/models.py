@@ -2,8 +2,9 @@ from django.db import models
 from apps.wilayas.models import Commune
 from apps.clients.models import Client
 from django.utils import timezone
-
 from apps.services.models import Service
+
+
 
 
 
@@ -69,3 +70,16 @@ class EventItem(models.Model):
 
     class Meta:
         unique_together = ('event', 'service')
+
+
+
+
+class Reservation(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    event_type = models.ForeignKey(EventType, on_delete=models.SET_NULL, null=True)
+    commune = models.ForeignKey(Commune, on_delete=models.SET_NULL, null=True)
+    date = models.DateField()
+    confirmed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.client.user.get_full_name()} - {self.date}"
