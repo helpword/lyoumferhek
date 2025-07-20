@@ -56,8 +56,10 @@ INSTALLED_APPS = [
     'apps.wilayas',
 
     # External packages
+    "debug_toolbar",
     'django_extensions',
     'django_htmx',
+
 ]
 
 
@@ -69,8 +71,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'allauth.account.middleware.AccountMiddleware',  # ✅ أضف هذا السطر
     'django.contrib.messages.middleware.MessageMiddleware',
+
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -91,7 +95,11 @@ TEMPLATES = [
     },
 ]
 
-
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
 WSGI_APPLICATION = 'config.wsgi.application'
 
 

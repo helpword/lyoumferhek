@@ -4,6 +4,7 @@ from apps.clients import views
 from django.contrib.auth import views as auth_views
 from apps.clients.views import client_register_view
 from apps.prestataires.views import prestataire_register_view
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 
 urlpatterns = [
@@ -19,7 +20,7 @@ urlpatterns = [
     path('register/prestataire/', prestataire_register_view, name='prestataire_register'),
     path('accounts/', include('allauth.urls')),
     path('users/', include('apps.users.urls')),
-]
+] + debug_toolbar_urls()
 
 
 

@@ -8,50 +8,24 @@ from .models import Client
 from django.shortcuts import render
 from apps.services.models import Service, ServiceCategory
 from apps.wilayas.models import Wilaya, Commune
-from django.shortcuts import get_object_or_404
-from django.contrib.auth import login as auth_login
 from apps.events.models import Reservation  # أو المسار الصحيح للموديل
+from django.contrib.auth import logout
 
-@login_required
-def client_dashboard(request):
-    user = request.user
-    try:
-        client = user.client_profile
-    except Client.DoesNotExist:
-        return JsonResponse({'error': 'Client profile not found'}, status=404)
+# @login_required
+# def client_dashboard(request):
+#     user = request.user
+#     try:
+#         client = user.client_profile
+#     except Client.DoesNotExist:
+#         return JsonResponse({'error': 'Client profile not found'}, status=404)
 
-    reservations = Reservation.objects.filter(client=client).select_related('event_type', 'commune')
+#     reservations = Reservation.objects.filter(client=client).select_related('event_type', 'commune')
 
-    return render(request, 'client/dashboard.html', {
-        'client': client,
-        'reservations': reservations
-    })
+#     return render(request, 'client/dashboard.html', {
+#         'client': client,
+#         'reservations': reservations
+#     })
 
-
-
-def client_login_view(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        user = authenticate(request, email=email, password=password)
-        if user is not None and user.is_client:
-            login(request, user)
-            return redirect('client_dashboard')
-        else:
-            messages.error(request, 'Adresse e-mail ou mot de passe invalide.')
-    return render(request, 'clients/login.html')
-
-
-def client_register_view(request):
-    form = ClientRegisterForm(request.POST or None)
-    if form.is_valid():
-        user = form.save()
-        auth_login(request, user)  # ✅ تسجيل الدخول تلقائياً
-        return redirect('client_dashboard')  # ✅ التوجيه إلى /client/dashboard/
-    return render(request, 'clients/register.html', {'form': form})
-
-def home(request):
-    return render(request, 'home.html')
 
 def client_list(request):
     clients = list(Client.objects.values())
@@ -68,32 +42,32 @@ def client_detail(request, pk):
     except Client.DoesNotExist:
         return JsonResponse({"error": "Client not found"}, status=404)
 
-from apps.events.models import Reservation  # أو المسار الصحيح للموديل
-
-@login_required
-def client_dashboard(request):
-    user = request.user
-    try:
-        client = user.client_profile
-    except Client.DoesNotExist:
-        return JsonResponse({'error': 'Client profile not found'}, status=404)
-
-    reservations = Reservation.objects.filter(client=client).select_related('event_type', 'commune')
-
-    return render(request, 'clients/dashboard.html', {
-        'client': client,
-        'reservations': reservations
-    })
-
 
     
+
+def client_login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request, username=email, password=password)
+        if user is not None and hasattr(user, 'client_profile'):
+            login(request, user)
+            return redirect('client_dashboard')
+        else:
+            messages.error(request, 'Adresse e-mail ou mot de passe invalide.')
+    return redirect('home')
+
+
+
 def client_register_view(request):
     form = ClientRegisterForm(request.POST or None)
     if form.is_valid():
         user = form.save()  # يحفظ المستخدم
-        Client.objects.create(user=user, phone=form.cleaned_data['phone'])  # ينشئ ملف Client
-
-        login(request, user)  # تسجيل دخول مباشرة إن أردت
+        # Client.objects.create(user=user, phone=user.phone)  # ينشئ ملف Client
+        if request.user.is_authenticated:
+            logout(request)  # تسجيل الخروج إن كان المستخدم مسجلاً دخول مسبقاً
+            messages.success(request, 'Vous êtes déjà connecté. Votre profil client a été créé.')
+        # login(request, user)  # تسجيل دخول مباشرة إن أردت
         return redirect('client_dashboard')  # أو أي صفحة نجاح
     return render(request, 'clients/register.html', {'form': form})
 
@@ -127,10 +101,11 @@ def search_services(request):
 
 def client_dashboard(request):
     user = request.user
+    
     try:
         client = user.client_profile
     except Client.DoesNotExist:
         return JsonResponse({'error': 'Client profile not found'}, status=404)
-
+# apps/clients/templates/clients/dashboard.html
     # تابع العرض عادي هنا
-    return render(request, 'client/dashboard.html', {'client': client})    
+    return render(request, 'clients/dashboard.html', {'client': client})    
