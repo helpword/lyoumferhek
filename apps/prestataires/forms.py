@@ -1,22 +1,62 @@
+# from django import forms
+# from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth import get_user_model
+# from apps.services.models import ServiceType, Service
+# from .models import Prestataire
+# User = get_user_model()
+
+
+# class PrestataireRegisterForm(UserCreationForm):
+#     first_name = forms.CharField(label="Prénom")
+#     last_name = forms.CharField(label="Nom")
+#     phone = forms.CharField(label="Téléphone", required=False)
+#     address = forms.CharField(label="Adresse", required=False)
+
+#     class Meta:
+#         model = User
+#         fields = ['email', 'first_name', 'last_name', 'phone', 'address', 'password1', 'password2']
+
+#     def save(self, commit=True):
+#         user = super().save(commit=False)
+#         user.is_prestataire = True
+#         if commit:
+#             user.save()
+#         return user
+    
+
+
+
+
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from apps.prestataires.models import Prestataire
+from apps.services.models import Service, ServiceCategory
 
-
-class PrestataireRegisterForm(UserCreationForm):
-    first_name = forms.CharField(label="Prénom")
-    last_name = forms.CharField(label="Nom")
-    phone = forms.CharField(label="Téléphone", required=False)
-    address = forms.CharField(label="Adresse", required=False)
+class PrestataireRegisterForm(forms.ModelForm):
+    category = forms.ModelChoiceField(
+        queryset=ServiceCategory.objects.all(),
+        label="نوع الخدمة",
+        required=True
+    )
+    service = forms.ModelChoiceField(
+        queryset=Service.objects.none(),
+        label="الخدمة",
+        required=True
+    )
 
     class Meta:
-        model = User
-        fields = ['email', 'first_name', 'last_name', 'phone', 'address', 'password1', 'password2']
+        model = Prestataire
+        fields = ['email', 'first_name', 'last_name', 'phone', 'address', 'category', 'service', 'password']
+        widgets = {
+            'password': forms.PasswordInput(),
+        }
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.is_prestataire = True
-        if commit:
-            user.save()
-        return user
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'category' in self.data:
+            try:
+                category_id = int(self.data.get('category'))
+                self.fields['service'].queryset = Service.objects.filter(category_id=category_id)
+            except (ValueError, TypeError):
+                pass
+        elif self.instance.pk:
+            self.fields['service'].queryset = self.instance.category.services.all()

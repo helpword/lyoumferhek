@@ -1,0 +1,47 @@
+[
+    {
+        "model": "services.servicecategory",
+        "pk": 1,
+        "fields": {
+            "name_ar": "التصوير والفيديو",
+            "name_fr": "Photographie et Vidéo",
+            "event_types": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "services.service",
+        "pk": 1,
+        "fields": {
+            "name_ar": "مصور",
+            "name_fr": "Photographe",
+            "category": 1,
+            "event_types": [
+                1
+            ],
+            "prestataire": 1,
+            "price": "15000.00",
+            "description": "خدمة تصوير احترافية",
+            "duration": "01:00:00",
+            "is_available": true
+        }
+    },
+    {
+        "model": "services.service",
+        "pk": 2,
+        "fields": {
+            "name_ar": "تصوير فيديو",
+            "name_fr": "Vidéo",
+            "category": 1,
+            "event_types": [
+                1
+            ],
+            "prestataire": 1,
+            "price": "20000.00",
+            "description": "خدمة فيديو للمناسبات",
+            "duration": "02:00:00",
+            "is_available": true
+        }
+    }
+]

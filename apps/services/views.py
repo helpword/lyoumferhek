@@ -3,6 +3,11 @@ from django.http import JsonResponse
 from apps.prestataires.models import Prestataire
 from apps.wilayas.models import Commune
 from .forms import WilayaCommuneForm, Step1Form, Step2Form, Step3Form, Step4Form
+from apps.events.models import Reservation
+
+
+
+
 
 
 
@@ -70,3 +75,33 @@ def form_complete_view(request):
         'step4': request.session.get('step4'),
     }
     return render(request, 'form/complete.html', data)
+
+
+
+
+def home(request):
+    user = request.user
+
+    try:
+        client = user.client_profile
+    except Client.DoesNotExist:
+        client = None
+
+    confirmed_reservations = pending_reservations = canceled_reservations = events_count = 0
+
+    if client:
+        reservations = Reservation.objects.filter(client=client)
+        confirmed_reservations = reservations.filter(status='confirmed').count()
+        pending_reservations = reservations.filter(status='pending').count()
+        canceled_reservations = reservations.filter(status='canceled').count()
+        events_count = reservations.count()
+
+    context = {
+        'confirmed_reservations': confirmed_reservations,
+        'pending_reservations': pending_reservations,
+        'canceled_reservations': canceled_reservations,
+        'events_count': events_count,
+        # أضف أي متغيرات أخرى تحتاجها في القالب
+    }
+
+    return render(request, 'home/index.html', context)

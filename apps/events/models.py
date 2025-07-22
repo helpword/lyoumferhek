@@ -75,11 +75,18 @@ class EventItem(models.Model):
 
 
 class Reservation(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    event_type = models.ForeignKey(EventType, on_delete=models.SET_NULL, null=True)
-    commune = models.ForeignKey(Commune, on_delete=models.SET_NULL, null=True)
-    date = models.DateField()
-    confirmed = models.BooleanField(default=False)
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('canceled', 'Canceled'),
+    ]
 
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    event_type = models.ForeignKey(EventType, on_delete=models.CASCADE)
+    commune = models.ForeignKey(Commune, on_delete=models.SET_NULL, null=True, blank=True)
+    date = models.DateField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    
     def __str__(self):
-        return f"{self.client.user.get_full_name()} - {self.date}"
+        return f"{self.client.user.username} - {self.event_type.name} ({self.status})"
+
