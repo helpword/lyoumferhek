@@ -4,10 +4,28 @@ from apps.prestataires.models import Prestataire
 from apps.wilayas.models import Commune
 from .forms import WilayaCommuneForm, Step1Form, Step2Form, Step3Form, Step4Form
 from apps.events.models import Reservation
+from .models import Service
+from apps.services.models import ServiceCategory
+
+def register_prestataire(request):
+    categories = ServiceCategory.objects.all()
+    return render(request, 'prestataire/register.html', {
+        'categories': categories,
+        # إذا كنت ترسل فورم أيضاً أضفه هنا
+    })
+
+
+def get_services_by_category(request):
+    category_id = request.GET.get('category_id')
+    services = Service.objects.filter(category_id=category_id).values('id', 'name')
+    return JsonResponse(list(services), safe=False)
 
 
 
-
+def ajax_load_services(request):
+    category_id = request.GET.get('category_id')  # <-- هذا هو الصحيح الآن
+    services = Service.objects.filter(category_id=category_id).values('id', 'name_fr', 'name_ar')
+    return JsonResponse(list(services), safe=False)
 
 
 

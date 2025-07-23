@@ -8,14 +8,7 @@ from django.contrib import messages
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from apps.services.models import Service
-
-
-
-def load_services(request):
-    type_id = request.GET.get('type_id')
-    services = Service.objects.filter(service_type_id=type_id).values('id', 'name')
-    return JsonResponse({'services': list(services)})
-
+from apps.services.models import ServiceCategory
 
 
 def prestataire_login_view(request):
@@ -80,16 +73,36 @@ def prestataire_register_view(request):
     return render(request, 'prestataires/register.html', {'form': form})
 
 
-def prestataire_register(request):
+
+
+def register_prestataire(request):
     if request.method == 'POST':
         form = PrestataireRegisterForm(request.POST)
         if form.is_valid():
-            prestataire = form.save(commit=False)
-            prestataire.set_password(form.cleaned_data['password'])
-            prestataire.save()
-            return redirect('login')
+            form.save()
+            # Redirect or login
     else:
         form = PrestataireRegisterForm()
-    return render(request, 'prestataires/register.html', {'form': form})
+
+    categories = ServiceCategory.objects.all()
+    return render(request, 'prestataire/register.html', {
+        'form': form,
+        'categories': categories
+    })
+
+
+
+def your_view(request):
+    categories = ServiceCategory.objects.all()
+    return render(request, 'your_template.html', {'categories': categories})
+
+
+
+
+
+def load_services(request):
+    category_id = request.GET.get('category_id') or request.GET.get('category')  # يدعم كلا الاسمين
+    services = Service.objects.filter(category_id=category_id).values('id', 'name_fr', 'name_ar')
+    return JsonResponse(list(services), safe=False)
 
 

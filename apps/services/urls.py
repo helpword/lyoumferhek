@@ -11,4 +11,6 @@ urlpatterns = [
     path('ajax/load-communes/', views.load_communes, name='load_communes'),
     path('test-wilaya-commune/', views.wilaya_commune_test, name='wilaya_commune_test'),
     path('ajax/load-communes/', views.load_communes, name='ajax_load_communes'),
+    path('ajax/get-services/', views.get_services_by_category, name='get_services_by_category'),
+    path('ajax/get-services/', views.ajax_load_services, name='ajax_load_services'),
 ]
