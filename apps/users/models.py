@@ -72,8 +72,8 @@ class User(AbstractUser, TimestampedModel):
     )
     email       = models.EmailField(_('E-mail address'), unique=True)
     picture     = models.ImageField(upload_to='images/faces', null=True, blank=True)
-    phone       = models.CharField(max_length=20, null=True, blank=True)
-    address     = models.CharField(verbose_name=_("Address"), max_length=150, null=True, blank=True)
+    phone = models.CharField(max_length=20, blank=True)
+    address = models.CharField(max_length=255, blank=True)
 
     is_manager  = models.BooleanField(default=False)
     is_client = models.BooleanField(default=False)
@@ -82,6 +82,7 @@ class User(AbstractUser, TimestampedModel):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = UserManager()
+
 
     
         

@@ -7,8 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.http import JsonResponse
-from apps.services.models import Service
-from apps.services.models import ServiceCategory
+from django.urls import reverse
 
 
 def prestataire_login_view(request):
@@ -53,8 +52,10 @@ def prestataire_register_view(request):
     if request.method == 'POST':
         form = PrestataireRegisterForm(request.POST, request.FILES)
         if form.is_valid():
-            prestataire = form.save()
-            login(request, prestataire.user)
+            user = form.save()
+            # prestataire = Prestataire.objects.create(user=user)
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            login(request, user)
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': True, 'redirect_url': reverse('prestataire_dashboard')})
             return redirect('prestataire_dashboard')
@@ -65,7 +66,6 @@ def prestataire_register_view(request):
     else:
         form = PrestataireRegisterForm()
     
-    # تحميل أول مرة (GET)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         html = render_to_string('prestataires/register.html', {'form': form}, request=request)
         return JsonResponse({'html': html})
@@ -75,34 +75,8 @@ def prestataire_register_view(request):
 
 
 
-def register_prestataire(request):
-    if request.method == 'POST':
-        form = PrestataireRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            # Redirect or login
-    else:
-        form = PrestataireRegisterForm()
-
-    categories = ServiceCategory.objects.all()
-    return render(request, 'prestataire/register.html', {
-        'form': form,
-        'categories': categories
-    })
 
 
 
-def your_view(request):
-    categories = ServiceCategory.objects.all()
-    return render(request, 'your_template.html', {'categories': categories})
-
-
-
-
-
-def load_services(request):
-    category_id = request.GET.get('category_id') or request.GET.get('category')  # يدعم كلا الاسمين
-    services = Service.objects.filter(category_id=category_id).values('id', 'name_fr', 'name_ar')
-    return JsonResponse(list(services), safe=False)
 
 
