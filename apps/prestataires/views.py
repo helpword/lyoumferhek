@@ -20,7 +20,7 @@ def prestataire_login_view(request):
             return redirect('prestataire_dashboard')  # تأكد أن هذه الصفحة موجودة
         else:
             messages.error(request, 'Adresse e-mail ou mot de passe invalide.')
-    return render(request, 'prestataires/login.html')
+    return render(request, 'prestataires/dashboard.html')
 
 
 # def prestataire_register_view(request):
@@ -42,7 +42,7 @@ def prestataire_dashboard(request):
     user = request.user
     if hasattr(user, 'prestataire_profile'):
         prestataire = user.prestataire_profile
-        return render(request, 'prestataire/dashboard.html', {'prestataire': prestataire})
+        return render(request, 'prestataires/dashboard.html', {'prestataire': prestataire})
     else:
         return render(request, 'errors/unauthorized.html')  # أو أي صفحة خطأ عندك
     

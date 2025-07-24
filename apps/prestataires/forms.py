@@ -12,11 +12,11 @@ class PrestataireRegisterForm(UserCreationForm):
     phone = forms.CharField(label="Téléphone", required=False)
     address = forms.CharField(label="Adresse", required=False)
     
-    name_ar = forms.CharField(label="Nom en arabe", required=True)
-    name_fr = forms.CharField(label="Nom en français", required=True)
-    service_type = forms.ChoiceField(label="Type de service", choices=Prestataire._meta.get_field('service_type').choices)
-    wilaya = forms.ModelChoiceField(queryset=Wilaya.objects.all(), required=True)
-    commune = forms.ModelChoiceField(queryset=Commune.objects.all(), required=True)
+    # name_ar = forms.CharField(label="Nom en arabe", required=True)
+    # name_fr = forms.CharField(label="Nom en français", required=True)
+    # service_type = forms.ChoiceField(label="Type de service", choices=Prestataire._meta.get_field('service_type').choices)
+    # wilaya = forms.ModelChoiceField(queryset=Wilaya.objects.all(), required=True)
+    # commune = forms.ModelChoiceField(queryset=Commune.objects.all(), required=True)
 
     class Meta:
         model = User
@@ -40,7 +40,9 @@ class PrestataireRegisterForm(UserCreationForm):
             user.save()
             Prestataire.objects.create(
                 user=user,
-               
+               name_fr = self.cleaned_data['first_name'],
+               phone = user.phone,
+               email=user.email,
             )
         return user
 

@@ -43,7 +43,8 @@ class Commune(models.Model):
 
     
     def __str__(self):
-        return self.ar_name or self.name_fr or self.name
+        return self.name_fr or self.name
+
 
 
     class Meta:
