@@ -8,6 +8,8 @@ from django.contrib import messages
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.urls import reverse
+import json
+from django.utils.safestring import mark_safe
 
 
 def prestataire_login_view(request):
@@ -42,9 +44,26 @@ def prestataire_dashboard(request):
     user = request.user
     if hasattr(user, 'prestataire_profile'):
         prestataire = user.prestataire_profile
-        return render(request, 'prestataires/dashboard.html', {'prestataire': prestataire})
+        commandes = prestataire.orders.all()
+        reviews = prestataire.reviews.all()  # تأكد أن لديك علاقة reviews في الموديل
+
+        # تحويل التقييمات إلى JSON للرسم البياني
+        ratings = [review.rating for review in reviews]
+        ratings_json = mark_safe(json.dumps(ratings))
+
+        # جلب عدد الطلبات (افتراضًا لديك Order مرتبط بـ Prestataire)
+        commandes = prestataire.orders.all() 
+        return render(request, 'prestataires/dashboard.html', {
+            'prestataire': prestataire,
+            'reviews': reviews,
+            'ratings_json': ratings_json,
+            'commandes': commandes
+        })
     else:
-        return render(request, 'errors/unauthorized.html')  # أو أي صفحة خطأ عندك
+        return render(request, 'errors/unauthorized.html')
+    
+    
+    # أو أي صفحة خطأ عندك
     
 
 

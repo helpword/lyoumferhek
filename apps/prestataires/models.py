@@ -48,3 +48,14 @@ class ServiceType(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.category.name})"
+
+
+
+class Review(models.Model):
+    prestataire = models.ForeignKey("prestataires.Prestataire", on_delete=models.CASCADE, related_name="reviews")
+    rating = models.PositiveSmallIntegerField()  # 1 إلى 5
+    comment = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.rating} ⭐ - {self.prestataire.name_fr}"      

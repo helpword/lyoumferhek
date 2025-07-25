@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings
 from apps.prestataires.models import Prestataire
 
 
@@ -40,3 +40,18 @@ class Service(models.Model):
 
     class Meta:
         ordering = ['category', 'name_ar', 'name_fr']
+
+class Order(models.Model):
+    prestataire = models.ForeignKey("prestataires.Prestataire", on_delete=models.CASCADE, related_name="orders")
+    client = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="orders")
+    date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=[
+        ("en_attente", "En attente"),
+        ("confirme", "Confirmé"),
+        ("annule", "Annulé"),
+    ])
+    # أضف أي حقول أخرى حسب الحاجة
+
+    def __str__(self):
+        return f"Commande pour {self.prestataire.name_fr} - {self.status}"
+
