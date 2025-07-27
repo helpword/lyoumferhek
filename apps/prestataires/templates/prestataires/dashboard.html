@@ -51,7 +51,7 @@
                     <p><strong>Commune :</strong> {{ prestataire.commune.name }}</p>
                 </div>
             </div>
-            <a href="{% url 'prestataire:update_profile' %}" class="inline-block mt-4 bg-[#ff3366] hover:bg-[#cd2d99] text-white text-sm font-medium py-2 px-4 rounded-lg shadow">
+            <a href="{% url 'prestataires:update_profile' %}" class="inline-block mt-4 bg-[#ff3366] hover:bg-[#cd2d99] text-white text-sm font-medium py-2 px-4 rounded-lg shadow">
                 Mettre à jour le profil
             </a>
         </section>
@@ -74,19 +74,19 @@
 
         <!-- Modules -->
         <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-            <a href="{% url 'add_service' %}" class="bg-white p-4 rounded-xl shadow hover:border-[#ff3366] border border-transparent transition">
+            <a href="{% url 'prestataires:add_service' %}" class="bg-white p-4 rounded-xl shadow hover:border-[#ff3366] border border-transparent transition">
                 <h4 class="font-medium text-[#ff3366] mb-1">➕ Ajouter un service</h4>
                 <p class="text-sm text-gray-500">Créez un nouveau service avec photos et prix.</p>
             </a>
-            <a href="{% url 'my_services' %}" class="bg-white p-4 rounded-xl shadow hover:border-[#cd2d99] border border-transparent transition">
+            <a href="{% url 'prestataires:my_services' %}" class="bg-white p-4 rounded-xl shadow hover:border-[#cd2d99] border border-transparent transition">
                 <h4 class="font-medium text-[#cd2d99] mb-1">🛠️ Gérer mes services</h4>
                 <p class="text-sm text-gray-500">Modifiez ou supprimez les services existants.</p>
             </a>
-            <a href="{% url 'calendar_view' %}" class="bg-white p-4 rounded-xl shadow hover:border-[#ff3366] border border-transparent transition">
+            <a href="{% url 'prestataires:calendar_view' %}" class="bg-white p-4 rounded-xl shadow hover:border-[#ff3366] border border-transparent transition">
                 <h4 class="font-medium text-[#ff3366] mb-1">📅 Mon calendrier</h4>
                 <p class="text-sm text-gray-500">Consultez vos disponibilités.</p>
             </a>
-            {% comment %} <a href="{% url 'inbox' %}" class="bg-white p-4 rounded-xl shadow hover:border-[#cd2d99] border border-transparent transition">   {% endcomment %}
+            <a href="{% url 'prestataires:inbox_view' %}" class="bg-white p-4 rounded-xl shadow hover:border-[#cd2d99] border border-transparent transition">
                 <h4 class="font-medium text-[#cd2d99] mb-1">📨 Boîte de réception</h4>
                 <p class="text-sm text-gray-500">Discutez avec vos clients.</p>
             </a>

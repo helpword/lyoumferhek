@@ -1,7 +1,6 @@
 from django.urls import path
 from .views import SignupView, SignupsuccessView
 from django.contrib.auth import views as auth_views
-from .forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .views import (UserDetailView, UserUpdateView, UserListView,
                       change_password,LoginView,UserCreateView,logout_view,
@@ -12,10 +11,7 @@ from django.urls import reverse_lazy
 app_name= 'users'
 
 urlpatterns = [
-    path('login/', LoginView.as_view(
-        template_name="accounts/login.html",
-        form_class=AuthenticationForm,
-     ), name='login'),
+    path('login/', LoginView.as_view(), name='login'),
     path('signup/', SignupView.as_view(), name="signup"),
     path('signup_success/', SignupsuccessView.as_view(), name="signup_success"),
     

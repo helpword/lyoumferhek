@@ -143,16 +143,22 @@ def update_profile(request):
 def add_service(request):
     return render(request, 'prestataires/add_service.html')
 
+
 @login_required
 def my_services(request):
     return render(request, 'prestataires/my_services.html')
 
+
 @login_required
 def calendar_view(request):
     return render(request, 'prestataires/calendar.html')
+
+
 @login_required
 def inbox_view(request):
     return render(request, 'prestataires/inbox.html')
+
+
 @login_required
 def update_profile_view(request):
     return render(request, 'prestataires/update_profile.html')

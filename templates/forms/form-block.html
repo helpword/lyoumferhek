@@ -1,0 +1,36 @@
+{% load static widget_tweaks %}
+
+{% if form.non_field_errors %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {% for err in form.non_field_errors %}
+            <div>{{ err }}</div>
+        {% endfor %}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+
+{% with WIDGET_ERROR_CLASS='is-invalid' %}         
+    {% for field in form %}
+        <div class="flex-column mb-8 fv-row" 
+            {% for name, value in field.field.widget.attrs.items %}{{ name }}="{{ value|stringformat:'s' }}"{% endfor %}
+        >
+            <label for="{{ field.id_for_label }}" class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                <span {% if field.field.required %}class="required"{% endif %}>{{field.label}} </span>
+            </label>
+            {% if field.name == 'is_default' %}
+                <div class="form-check form-switch form-check-custom form-check-solid">
+                    {% render_field field class='form-check-input' %}
+                    <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                </div>
+            {% else %}
+                {% render_field field class='form-control mb-3' %}
+            {% endif %}
+            {% if field.errors %}
+                <span class="form-check-label fw-semibold text-danger">{{ field.errors }}</span>
+            {% else %}
+                {{ field.help_text }}
+            {% endif %}
+        </div>
+    {% endfor %} 
+{% endwith %}  

@@ -8,7 +8,7 @@ from django.views import View
 import json
 from django_htmx.http import HttpResponseClientRedirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import (UserCreationForm, UserEditionForm, 
+from .forms import (AuthenticationForm, UserCreationForm, UserEditionForm, 
 ChangePasswordForm,AddGroupForm)
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -25,17 +25,25 @@ from django.conf import settings
 from .utils import get_permissions
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_not_required
+from django_htmx.http import HttpResponseClientRedirect 
+
+
 logger = logging.getLogger(__name__)
 
 
 # -----------------------------LOGIN--LOGOUT----------------------------------------------------------
 
-class LoginView(DjangoLoginView):
 
+class LoginView(DjangoLoginView):
+    template_name="accounts/login.html"
+    form_class = AuthenticationForm
+    
     @method_decorator(login_not_required)
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
-            return redirect(reverse('core:index'))
+            if self.request.user.is_prestataire:
+                return HttpResponseClientRedirect('prestataires:prestataire_dashboard') 
+            return HttpResponseClientRedirect('users:userdetail', kwargs={'pk': self.request.user.pk})
         return super().dispatch(request, *args, **kwargs)
     
     def get_success_url(self):
@@ -43,6 +51,8 @@ class LoginView(DjangoLoginView):
         if not user:
             messages.error(self.request, _("Email ou mot de passe incorrect."))
             return "/"
+        if user.is_prestataire:
+            return HttpResponseClientRedirect('prestataires:prestataire_dashboard') 
         return reverse('users:userdetail', kwargs={'pk': user.pk})
     
     def form_invalid(self, form):
@@ -54,15 +64,13 @@ class LoginView(DjangoLoginView):
     
     def form_valid(self, form):
         """Security check complete. Log the user in."""
-        user = auth_login(self.request, form.get_user())
-        if user is not None and user.is_prestataire:
-            return redirect('prestataires:prestataire_dashboard') 
-        user_language = self.request.user.language or "fr"
-        print('user_language>>>>>>>', user_language)
-        translation.activate(user_language)
-        response = HttpResponseRedirect(self.get_success_url())
-        response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
-        return response
+        auth_login(self.request, form.get_user())
+
+        # user_language = self.request.user.language or "fr"
+        # print('user_language>>>>>>>', user_language)
+        # translation.activate(user_language)
+        # response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
+        return self.get_success_url()
 
 
 

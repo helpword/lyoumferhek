@@ -1,558 +1,535 @@
 {% load static %}
-{% load account socialaccount %}
+{% load account socialaccount widget_tweaks %}
 
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Lyoum Ferhek</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8" />
+<title>Lyoum Ferhek</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Bootstrap, Icons & Google Fonts -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<!-- Bootstrap, Icons & Google Fonts -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-      height: 100%;
-    }
+<style>
+	body, html {
+	margin: 0;
+	padding: 0;
+	font-family: 'Inter', sans-serif;
+	height: 100%;
+	}
 
-    .hero {
-      position: relative;
-      height: 100vh;
-      background-image: url("{% static 'home/hero-bg.jpg' %}");
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: white;
-    }
+	.hero {
+	position: relative;
+	height: 100vh;
+	background-image: url("{% static 'home/hero-bg.jpg' %}");
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	color: white;
+	}
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 1;
-    }
+	.hero::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.6);
+	z-index: 1;
+	}
 
-    .hero-content {
-      position: relative;
-      z-index: 2;
-    }
+	.hero-content {
+	position: relative;
+	z-index: 2;
+	}
 
-    .hero h1 {
-      font-size: 5rem;
-      font-weight: 800;
-      margin-bottom: 15px;
-    }
+	.hero h1 {
+	font-size: 5rem;
+	font-weight: 800;
+	margin-bottom: 15px;
+	}
 
-    .text-gradient {
-      background: linear-gradient(135deg, #ff3366, #cd2d99);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      color: transparent;
-    }
+	.text-gradient {
+	background: linear-gradient(135deg, #ff3366, #cd2d99);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	color: transparent;
+	}
 
-    .hero p {
-      font-size: 1.25rem;
-      margin-bottom: 30px;
-      max-width: 600px;
-      line-height: 1.6;
-      margin: 0 auto 30px auto;
-    }
+	.hero p {
+	font-size: 1.25rem;
+	margin-bottom: 30px;
+	max-width: 600px;
+	line-height: 1.6;
+	margin: 0 auto 30px auto;
+	}
 
-    .btn-primary-custom {
-      background: linear-gradient(135deg, #ff3366, #cd2d99);
-      border: none;
-      padding: 10px 24px;
-      font-weight: 600;
-      color: white;
-      animation: glow 1s ease-in-out infinite alternate;
-      box-shadow: 0 0 10px rgba(255, 51, 102, 0.7);
-      transition: transform 0.3s ease, background 0.3s ease;
-    }
+	.btn-primary-custom {
+	background: linear-gradient(135deg, #ff3366, #cd2d99);
+	border: none;
+	padding: 10px 24px;
+	font-weight: 600;
+	color: white;
+	animation: glow 1s ease-in-out infinite alternate;
+	box-shadow: 0 0 10px rgba(255, 51, 102, 0.7);
+	transition: transform 0.3s ease, background 0.3s ease;
+	}
 
-    .btn-primary-custom:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 0 25px rgba(205, 45, 153, 0.8);
-      background: linear-gradient(135deg, #cd2d99, #ff3366);
-    }
+	.btn-primary-custom:hover {
+	transform: translateY(-3px) scale(1.05);
+	box-shadow: 0 0 25px rgba(205, 45, 153, 0.8);
+	background: linear-gradient(135deg, #cd2d99, #ff3366);
+	}
 
-    .btn-outline-light {
-      font-weight: 600;
-      padding: 10px 24px;
-      transition: transform 0.1s ease, background 0.1s ease;
-    }
+	.btn-outline-light {
+	font-weight: 600;
+	padding: 10px 24px;
+	transition: transform 0.1s ease, background 0.1s ease;
+	}
 
-    .btn-outline-light:hover {
-      transform: translateY(-2px);
-    }
-    .icon-circle {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background-color: #f2f2f2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 1.5rem;
-      margin-bottom: 15px;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .icon-circle:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    }
+	.btn-outline-light:hover {
+	transform: translateY(-2px);
+	}
+	.icon-circle {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	background-color: #f2f2f2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-size: 1.5rem;
+	margin-bottom: 15px;
+	transition: transform 0.3s, box-shadow 0.3s;
+	}
+	.icon-circle:hover {
+	transform: scale(1.1);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+	}
 
-    .bg-marron { background-color: #ff3366; }
-    .bg-pink { background-color: #ff3366; }
-    .bg-gold { background-color: #ff3366; }
-    .bg-green { background-color: #ff3366; }
-    .bg-purple { background-color: #ff3366; }
-    .bg-blue { background-color: #ff3366; }
-        .bg-red { background-color: #ff3366; }  
+	.bg-marron { background-color: #ff3366; }
+	.bg-pink { background-color: #ff3366; }
+	.bg-gold { background-color: #ff3366; }
+	.bg-green { background-color: #ff3366; }
+	.bg-purple { background-color: #ff3366; }
+	.bg-blue { background-color: #ff3366; }
+		.bg-red { background-color: #ff3366; }  
 
-     .icon-circle {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        color: white;
-      }
+	.icon-circle {
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.5rem;
+		color: white;
+	}
 
-      .bg-orange { background-color: #ff3366; }
-      .bg-yellow { background-color: #ff3366; }
-      .bg-purple { background-color: #ff3366; }
-      .bg-teal   { background-color: #ff3366; }
+	.bg-orange { background-color: #ff3366; }
+	.bg-yellow { background-color: #ff3366; }
+	.bg-purple { background-color: #ff3366; }
+	.bg-teal   { background-color: #ff3366; }
 
-          footer {
-      font-family: 'Inter', sans-serif;
-    }
+		footer {
+	font-family: 'Inter', sans-serif;
+	}
 
-    footer .text-gradient {
-      background: linear-gradient(135deg, #ff3366, #cd2d99);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      color: transparent;
+	footer .text-gradient {
+	background: linear-gradient(135deg, #ff3366, #cd2d99);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	color: transparent;
 }
 
 
 
-    @keyframes glow {
-      from {
-        box-shadow: 0 0 20px rgba(255, 51, 102, 0.6), 0 0 20px rgba(255, 51, 102, 0.4);
-      }
-      to {
-        box-shadow: 0 0 40px rgba(255, 51, 102, 1), 0 0 30px rgba(255, 51, 102, 0.8);
-      }
-    }
-  </style>
+	@keyframes glow {
+	from {
+		box-shadow: 0 0 20px rgba(255, 51, 102, 0.6), 0 0 20px rgba(255, 51, 102, 0.4);
+	}
+	to {
+		box-shadow: 0 0 40px rgba(255, 51, 102, 1), 0 0 30px rgba(255, 51, 102, 0.8);
+	}
+	}
+</style>
 </head>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <body>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-content container">
-      <h1>Lyoum <span class="text-gradient">Ferhek</span></h1>
-      <p>Organisez votre jour spécial sans effort. Trouvez les meilleurs
-         prestataires pour votre événement de rêve.</p>
-         {% comment %} <form method="GET" action="{% url 'search_services' %}" class="d-flex flex-column flex-md-row gap-3 justify-content-center mt-4">
-  <select name="wilaya" class="form-select w-auto" required>
-    <option value="">Wilaya</option>
-    {% for wilaya in wilayas %}
-      <option value="{{ wilaya.id }}">{{ wilaya.name_ar }}</option>
-    {% endfor %}
-  </select>
+<!-- Hero Section -->
+<section class="hero">
+	<div class="hero-content container">
+		<h1>Lyoum <span class="text-gradient">Ferhek</span></h1>
+		<p>Organisez votre jour spécial sans effort. Trouvez les meilleurs
+			prestataires pour votre événement de rêve.</p>
+			{% comment %} <form method="GET" action="{% url 'search_services' %}" class="d-flex flex-column flex-md-row gap-3 justify-content-center mt-4">
+	<select name="wilaya" class="form-select w-auto" required>
+		<option value="">Wilaya</option>
+		{% for wilaya in wilayas %}
+		<option value="{{ wilaya.id }}">{{ wilaya.name_ar }}</option>
+		{% endfor %}
+	</select>
 
-  <select name="commune" class="form-select w-auto" required>
-    <option value="">Commune</option>
-    {% for commune in communes %}
-      <option value="{{ commune.id }}">{{ commune.name_ar }}</option>
-    {% endfor %}
-  </select>
+	<select name="commune" class="form-select w-auto" required>
+		<option value="">Commune</option>
+		{% for commune in communes %}
+		<option value="{{ commune.id }}">{{ commune.name_ar }}</option>
+		{% endfor %}
+	</select>
 
-  <button type="submit" class="btn btn-primary-custom">
-    <i class="bi bi-search"></i> Rechercher maintenant
-  </button> {% endcomment %}
-</form>
+	<button type="submit" class="btn btn-primary-custom">
+		<i class="bi bi-search"></i> Rechercher maintenant
+	</button> {% endcomment %}
+	</form>
 
-      <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
-        <button type="button" class="btn btn-primary-custom d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#clientLoginModal">
-          <i class="bi bi-calendar2-check-fill"></i>
-          Commencer maintenant
-        </button>
-        <button type="button" class="btn btn-outline-light border-white d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#prestataireModal">
-          <i class="bi bi-people-fill"></i>
-          Devenir prestataire
-        </button>
-      </div>
-    </div>
-  </section>
+		<div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
+			<button type="button" class="btn btn-primary-custom d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#clientLoginModal">
+			<i class="bi bi-calendar2-check-fill"></i>
+			Commencer maintenant
+			</button>
+			<button type="button" class="btn btn-outline-light border-white d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#prestataireModal">
+			<i class="bi bi-people-fill"></i>
+			Devenir prestataire
+			</button>
+		</div>
+	</div>
+</section>
 
-  <!-- Client Login Modal -->
-  <div class="modal fade" id="clientLoginModal" tabindex="-1" aria-labelledby="clientLoginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="clientLoginModalLabel">Connexion Client</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-        </div>
-        <div class="modal-body">
-          <form method="POST" action="{% url 'client_login' %}">
-            {% csrf_token %}
-            <div class="mb-3">
-              <label class="form-label">Adresse E-mail</label>
-              <input type="email" name="email" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Mot de passe</label>
-              <input type="password" name="password" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Se connecter</button>
-          </form>
-          <div class="text-center mt-3">
-            <a href="{% url 'client_register' %}">Créer un compte client</a>
-          </div>
-          <div class="text-center mt-3">
-            <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger w-100">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" width="20" class="me-2" />
-              Connexion via Google
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
- 
- <!-- Prestataire Modal -->
-  <div class="modal fade" id="prestataireModal" tabindex="-1" aria-labelledby="prestataireModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content text-start">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="prestataireModalLabel">Connexion Prestataire</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-      </div>
-      <div class="modal-body">
+<!-- Client Login Modal -->
+<div class="modal fade" id="clientLoginModal" tabindex="-1" aria-labelledby="clientLoginModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="clientLoginModalLabel">Connexion Client</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+			</div>
+			<div class="modal-body">
+					{% include 'accounts/login.html' with form=prestataire_login_form %}
 
-        <!-- FORMULAIRE DE CONNEXION -->
-        <form method="POST" action="{% url 'users:login' %}">
-  
-          {% csrf_token %}
-          <div class="mb-3">
-            <label class="form-label">Adresse E-mail</label>
-            <input type="email" name="email" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Mot de passe</label>
-            <input type="password" name="password" class="form-control" required>
-          </div>
-          <button type="submit" class="btn btn-primary w-100">Se connecter</button>
-        </form>
-
-        <div class="text-center mt-3">
-          <a href="{% url 'prestataires:prestataire_register' %}" class="text-decoration-none">Créer un compte prestataire</a>
-        </div>
-
-        <div class="text-center mt-3">
-          <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger w-100">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" width="20" class="me-2" />
-            Se connecter avec Google
-          </a>
-        </div>
-
-      </div>
-    </div>
-  </div>
+				<div class="text-center mt-3">
+					<a href="{% url 'client_register' %}">Créer un compte client</a>
+				</div>
+				<div class="text-center mt-3">
+					<a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger w-100">
+						<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" width="20" class="me-2" />
+						Connexion via Google
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-  <section class="py-5 bg-white">
-  <div class="container text-center">
-    <h2 class="fw-bold mb-3 text-gradient" style="font-size: 2.5rem;">
-      Tous vos événements spéciaux
-    </h2>
-    <p class="text-muted mb-5" style="max-width: 700px; margin: auto;">
-      Quelle que soit l'occasion, nous avons l'expertise et les partenaires pour faire de votre événement un moment inoubliable.
-    </p>
 
-    <div class="row g-4 justify-content-center">
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="card border-0 shadow-sm h-100 p-3">
-          <div class="card-body text-center">
-            <div class="icon-circle bg-pink mx-auto">
-              <i class="bi bi-heart-fill"></i>
-            </div>
-            <h5 class="fw-semibold">Mariages</h5>
-            <p class="text-muted">Créez le mariage de vos rêves avec nos experts</p>
-          </div>
-        </div>
-      </div>
+<!-- Prestataire Modal -->
+<div class="modal fade" id="prestataireModal" tabindex="-1" aria-labelledby="prestataireModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+	<div class="modal-content text-start">
+	<div class="modal-header">
+		<h5 class="modal-title fw-bold" id="prestataireModalLabel">Connexion Prestataire</h5>
+		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+	</div>
+	<div class="modal-body">
 
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="card border-0 shadow-sm h-100 p-3">
-          <div class="card-body text-center">
-            <div class="icon-circle bg-gold mx-auto text-white">
-              <i class="bi bi-cake-fill"></i>
-            </div>
-            <h5 class="fw-semibold">Anniversaires</h5>
-            <p class="text-muted">Célébrez vos moments précieux en grand</p>
-          </div>
-        </div>
-      </div>
+		{% include 'accounts/login.html' with form=prestataire_login_form %}
 
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="card border-0 shadow-sm h-100 p-3">
-          <div class="card-body text-center">
-            <div class="icon-circle bg-blue mx-auto">
-              <i class="bi bi-mortarboard-fill"></i>
-            </div>
-            <h5 class="fw-semibold">Remises de diplômes</h5>
-            <p class="text-muted">Honorez vos réussites académiques</p>
-          </div>
-        </div>
-      </div>
+		<div class="text-center mt-3">
+		<a href="{% url 'prestataires:prestataire_register' %}" class="text-decoration-none">Créer un compte prestataire</a>
+		</div>
 
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="card border-0 shadow-sm h-100 p-3">
-          <div class="card-body text-center">
-            <div class="icon-circle bg-purple mx-auto">
-              <i class="bi bi-baby"></i>
-            </div>
-            <h5 class="fw-semibold">Baby shower</h5>
-            <p class="text-muted">Accueillez votre petit trésor avec style</p>
-          </div>
-        </div>
-      </div>
+		<div class="text-center mt-3">
+		<a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger w-100">
+			<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" width="20" class="me-2" />
+			Se connecter avec Google
+		</a>
+		</div>
 
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="card border-0 shadow-sm h-100 p-3">
-          <div class="card-body text-center">
-            <div class="icon-circle bg-marron mx-auto">
-              <i class="bi bi-briefcase-fill"></i>
-            </div>
-            <h5 class="fw-semibold">Événements corporatifs</h5>
-            <p class="text-muted">Organisez vos événements professionnels</p>
-          </div>
-        </div>
-      </div>
+	</div>
+	</div>
+</div>
+</div>
+<section class="py-5 bg-white">
+<div class="container text-center">
+	<h2 class="fw-bold mb-3 text-gradient" style="font-size: 2.5rem;">
+	Tous vos événements spéciaux
+	</h2>
+	<p class="text-muted mb-5" style="max-width: 700px; margin: auto;">
+	Quelle que soit l'occasion, nous avons l'expertise et les partenaires pour faire de votre événement un moment inoubliable.
+	</p>
 
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="card border-0 shadow-sm h-100 p-3">
-          <div class="card-body text-center">
-            <div class="icon-circle bg-green mx-auto">
-              <i class="bi bi-stars"></i>
-            </div>
-            <h5 class="fw-semibold">Fêtes personnalisées</h5>
-            <p class="text-muted">Créez des événements uniques sur mesure</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="row g-4 justify-content-center">
+	<div class="col-sm-6 col-md-4 col-lg-3">
+		<div class="card border-0 shadow-sm h-100 p-3">
+		<div class="card-body text-center">
+			<div class="icon-circle bg-pink mx-auto">
+			<i class="bi bi-heart-fill"></i>
+			</div>
+			<h5 class="fw-semibold">Mariages</h5>
+			<p class="text-muted">Créez le mariage de vos rêves avec nos experts</p>
+		</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-4 col-lg-3">
+		<div class="card border-0 shadow-sm h-100 p-3">
+		<div class="card-body text-center">
+			<div class="icon-circle bg-gold mx-auto text-white">
+			<i class="bi bi-cake-fill"></i>
+			</div>
+			<h5 class="fw-semibold">Anniversaires</h5>
+			<p class="text-muted">Célébrez vos moments précieux en grand</p>
+		</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-4 col-lg-3">
+		<div class="card border-0 shadow-sm h-100 p-3">
+		<div class="card-body text-center">
+			<div class="icon-circle bg-blue mx-auto">
+			<i class="bi bi-mortarboard-fill"></i>
+			</div>
+			<h5 class="fw-semibold">Remises de diplômes</h5>
+			<p class="text-muted">Honorez vos réussites académiques</p>
+		</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-4 col-lg-3">
+		<div class="card border-0 shadow-sm h-100 p-3">
+		<div class="card-body text-center">
+			<div class="icon-circle bg-purple mx-auto">
+			<i class="bi bi-baby"></i>
+			</div>
+			<h5 class="fw-semibold">Baby shower</h5>
+			<p class="text-muted">Accueillez votre petit trésor avec style</p>
+		</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-4 col-lg-3">
+		<div class="card border-0 shadow-sm h-100 p-3">
+		<div class="card-body text-center">
+			<div class="icon-circle bg-marron mx-auto">
+			<i class="bi bi-briefcase-fill"></i>
+			</div>
+			<h5 class="fw-semibold">Événements corporatifs</h5>
+			<p class="text-muted">Organisez vos événements professionnels</p>
+		</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-4 col-lg-3">
+		<div class="card border-0 shadow-sm h-100 p-3">
+		<div class="card-body text-center">
+			<div class="icon-circle bg-green mx-auto">
+			<i class="bi bi-stars"></i>
+			</div>
+			<h5 class="fw-semibold">Fêtes personnalisées</h5>
+			<p class="text-muted">Créez des événements uniques sur mesure</p>
+		</div>
+		</div>
+	</div>
+	</div>
+</div>
 </section>
 <section class="py-5 bg-light">
-  <div class="container text-center">
-    <h2 class="fw-bold mb-4 text-gradient" style="font-size: 2.5rem;">Comment ça marche ?</h2>
-    <p class="text-muted mb-5" style="max-width: 700px; margin: auto;">
-      En quelques étapes simples, planifiez votre célébration parfaite avec Lyoum Ferhek.
-    </p>
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm p-4 h-100">
-          <div class="icon-circle bg-blue mx-auto mb-3">
-            <i class="bi bi-ui-checks-grid"></i>
-          </div>
-          <h5 class="fw-semibold">1. Répondez aux questions</h5>
-          <p class="text-muted">Indiquez vos préférences, votre type d'événement, lieu et date.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm p-4 h-100">
-          <div class="icon-circle bg-pink mx-auto mb-3">
-            <i class="bi bi-stars"></i>
-          </div>
-          <h5 class="fw-semibold">2. Découvrez des services adaptés</h5>
-          <p class="text-muted">Nous vous suggérons les meilleurs prestataires selon vos réponses.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm p-4 h-100">
-          <div class="icon-circle bg-green mx-auto mb-3">
-            <i class="bi bi-calendar-check"></i>
-          </div>
-          <h5 class="fw-semibold">3. Réservez en ligne</h5>
-          <p class="text-muted">Confirmez votre choix ou gardez-le pour plus tard.</p>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="container text-center">
+	<h2 class="fw-bold mb-4 text-gradient" style="font-size: 2.5rem;">Comment ça marche ?</h2>
+	<p class="text-muted mb-5" style="max-width: 700px; margin: auto;">
+	En quelques étapes simples, planifiez votre célébration parfaite avec Lyoum Ferhek.
+	</p>
+	<div class="row g-4">
+	<div class="col-md-4">
+		<div class="card border-0 shadow-sm p-4 h-100">
+		<div class="icon-circle bg-blue mx-auto mb-3">
+			<i class="bi bi-ui-checks-grid"></i>
+		</div>
+		<h5 class="fw-semibold">1. Répondez aux questions</h5>
+		<p class="text-muted">Indiquez vos préférences, votre type d'événement, lieu et date.</p>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="card border-0 shadow-sm p-4 h-100">
+		<div class="icon-circle bg-pink mx-auto mb-3">
+			<i class="bi bi-stars"></i>
+		</div>
+		<h5 class="fw-semibold">2. Découvrez des services adaptés</h5>
+		<p class="text-muted">Nous vous suggérons les meilleurs prestataires selon vos réponses.</p>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="card border-0 shadow-sm p-4 h-100">
+		<div class="icon-circle bg-green mx-auto mb-3">
+			<i class="bi bi-calendar-check"></i>
+		</div>
+		<h5 class="fw-semibold">3. Réservez en ligne</h5>
+		<p class="text-muted">Confirmez votre choix ou gardez-le pour plus tard.</p>
+		</div>
+	</div>
+	</div>
+</div>
 </section>
 <section class="py-5">
-  <div class="container text-center">
-    <h2 class="fw-bold mb-4 text-gradient" style="font-size: 2.5rem;">Nos prestataires partenaires</h2>
-    <p class="text-muted mb-5" style="max-width: 700px; margin: auto;">
-      Des experts soigneusement sélectionnés pour garantir des services de qualité à chaque événement.
-    </p>
-    <div class="row g-4">
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm p-4 h-100 text-center">
-          <div class="icon-circle bg-orange mx-auto mb-3">
-            <i class="bi bi-camera2"></i>
-          </div>
-          <h6 class="fw-semibold">Photographes</h6>
-          <p class="text-muted small">Capturent chaque instant avec créativité.</p>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm p-4 h-100 text-center">
-          <div class="icon-circle bg-yellow mx-auto mb-3">
-            <i class="bi bi-cake2"></i>
-          </div>
-          <h6 class="fw-semibold">Pâtissiers</h6>
-          <p class="text-muted small">Des délices sur mesure pour vos fêtes.</p>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm p-4 h-100 text-center">
-          <div class="icon-circle bg-purple mx-auto mb-3">
-            <i class="bi bi-easel2"></i>
-          </div>
-          <h6 class="fw-semibold">Décorateurs</h6>
-          <p class="text-muted small">Des ambiances féeriques selon vos goûts.</p>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm p-4 h-100 text-center">
-          <div class="icon-circle bg-teal mx-auto mb-3">
-            <i class="bi bi-house-door-fill"></i>
-          </div>
-          <h6 class="fw-semibold">Salles & lieux</h6>
-          <p class="text-muted small">Des espaces élégants pour chaque événement.</p>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="container text-center">
+	<h2 class="fw-bold mb-4 text-gradient" style="font-size: 2.5rem;">Nos prestataires partenaires</h2>
+	<p class="text-muted mb-5" style="max-width: 700px; margin: auto;">
+	Des experts soigneusement sélectionnés pour garantir des services de qualité à chaque événement.
+	</p>
+	<div class="row g-4">
+	<div class="col-md-3">
+		<div class="card border-0 shadow-sm p-4 h-100 text-center">
+		<div class="icon-circle bg-orange mx-auto mb-3">
+			<i class="bi bi-camera2"></i>
+		</div>
+		<h6 class="fw-semibold">Photographes</h6>
+		<p class="text-muted small">Capturent chaque instant avec créativité.</p>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="card border-0 shadow-sm p-4 h-100 text-center">
+		<div class="icon-circle bg-yellow mx-auto mb-3">
+			<i class="bi bi-cake2"></i>
+		</div>
+		<h6 class="fw-semibold">Pâtissiers</h6>
+		<p class="text-muted small">Des délices sur mesure pour vos fêtes.</p>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="card border-0 shadow-sm p-4 h-100 text-center">
+		<div class="icon-circle bg-purple mx-auto mb-3">
+			<i class="bi bi-easel2"></i>
+		</div>
+		<h6 class="fw-semibold">Décorateurs</h6>
+		<p class="text-muted small">Des ambiances féeriques selon vos goûts.</p>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="card border-0 shadow-sm p-4 h-100 text-center">
+		<div class="icon-circle bg-teal mx-auto mb-3">
+			<i class="bi bi-house-door-fill"></i>
+		</div>
+		<h6 class="fw-semibold">Salles & lieux</h6>
+		<p class="text-muted small">Des espaces élégants pour chaque événement.</p>
+		</div>
+	</div>
+	</div>
+</div>
 </section>
 <section class="py-5 bg-light">
-  <div class="container text-center">
-    <h2 class="fw-bold mb-4 text-gradient" style="font-size: 2.5rem;">Ce que disent nos clients</h2>
-    <p class="text-muted mb-5" style="max-width: 700px; margin: auto;">
-      Découvrez les témoignages de ceux qui ont fait confiance à Lyoum Ferhek pour leurs événements.
-    </p>
+	<div class="container text-center">
+		<h2 class="fw-bold mb-4 text-gradient" style="font-size: 2.5rem;">Ce que disent nos clients</h2>
+		<p class="text-muted mb-5" style="max-width: 700px; margin: auto;">
+		Découvrez les témoignages de ceux qui ont fait confiance à Lyoum Ferhek pour leurs événements.
+		</p>
 
-    <div class="row g-4">
-      <!-- Témoignage 1 -->
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm h-100 p-4 text-start">
-          <div class="d-flex align-items-center mb-3">
-            <img src="{% static 'home/client1.jpg' %}" alt="Client 1" class="rounded-circle me-3" width="50" height="50">
-            <div>
-              <h6 class="mb-0 fw-semibold">Sofia M.</h6>
-              <small class="text-muted">Mariage</small>
-            </div>
-          </div>
-          <p class="text-muted mb-3">Une expérience parfaite ! Chaque détail était bien organisé. Je recommande à 100%.</p>
-          <div class="text-warning">
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-half"></i>
-          </div>
-        </div>
-      </div>
+		<div class="row g-4">
+		<!-- Témoignage 1 -->
+		<div class="col-md-4">
+			<div class="card border-0 shadow-sm h-100 p-4 text-start">
+				<div class="d-flex align-items-center mb-3">
+					<img src="{% static 'home/client1.jpg' %}" alt="Client 1" class="rounded-circle me-3" width="50" height="50">
+					<div>
+					<h6 class="mb-0 fw-semibold">Sofia M.</h6>
+					<small class="text-muted">Mariage</small>
+				</div>
+			</div>
+			<p class="text-muted mb-3">Une expérience parfaite ! Chaque détail était bien organisé. Je recommande à 100%.</p>
+			<div class="text-warning">
+				<i class="bi bi-star-fill"></i>
+				<i class="bi bi-star-fill"></i>
+				<i class="bi bi-star-fill"></i>
+				<i class="bi bi-star-fill"></i>
+				<i class="bi bi-star-half"></i>
+			</div>
+		</div>
+	</div>
 
-      <!-- Témoignage 2 -->
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm h-100 p-4 text-start">
-          <div class="d-flex align-items-center mb-3">
-            <img src="{% static 'home/client2.jpg' %}" alt="Client 2" class="rounded-circle me-3" width="50" height="50">
-            <div>
-              <h6 class="mb-0 fw-semibold">Nour B.</h6>
-              <small class="text-muted">Anniversaire</small>
-            </div>
-          </div>
-          <p class="text-muted mb-3">Ma fille était ravie de sa fête ! Une équipe professionnelle et souriante.</p>
-          <div class="text-warning">
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-          </div>
-        </div>
-      </div>
+	<!-- Témoignage 2 -->
+	<div class="col-md-4">
+		<div class="card border-0 shadow-sm h-100 p-4 text-start">
+		<div class="d-flex align-items-center mb-3">
+			<img src="{% static 'home/client2.jpg' %}" alt="Client 2" class="rounded-circle me-3" width="50" height="50">
+			<div>
+			<h6 class="mb-0 fw-semibold">Nour B.</h6>
+			<small class="text-muted">Anniversaire</small>
+			</div>
+		</div>
+		<p class="text-muted mb-3">Ma fille était ravie de sa fête ! Une équipe professionnelle et souriante.</p>
+		<div class="text-warning">
+			<i class="bi bi-star-fill"></i>
+			<i class="bi bi-star-fill"></i>
+			<i class="bi bi-star-fill"></i>
+			<i class="bi bi-star-fill"></i>
+			<i class="bi bi-star-fill"></i>
+		</div>
+		</div>
+	</div>
 
-      <!-- Témoignage 3 -->
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm h-100 p-4 text-start">
-          <div class="d-flex align-items-center mb-3">
-            <img src="{% static 'home/client3.jpg' %}" alt="Client 3" class="rounded-circle me-3" width="50" height="50">
-            <div>
-              <h6 class="mb-0 fw-semibold">Yacine T.</h6>
-              <small class="text-muted">Événement pro</small>
-            </div>
-          </div>
-          <p class="text-muted mb-3">Très satisfait du service. Tout était fluide, rapide et de qualité.</p>
-          <div class="text-warning">
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<!-- Témoignage 3 -->
+	<div class="col-md-4">
+		<div class="card border-0 shadow-sm h-100 p-4 text-start">
+		<div class="d-flex align-items-center mb-3">
+			<img src="{% static 'home/client3.jpg' %}" alt="Client 3" class="rounded-circle me-3" width="50" height="50">
+			<div>
+			<h6 class="mb-0 fw-semibold">Yacine T.</h6>
+			<small class="text-muted">Événement pro</small>
+			</div>
+		</div>
+		<p class="text-muted mb-3">Très satisfait du service. Tout était fluide, rapide et de qualité.</p>
+		<div class="text-warning">
+			<i class="bi bi-star-fill"></i>
+			<i class="bi bi-star-fill"></i>
+			<i class="bi bi-star-fill"></i>
+			<i class="bi bi-star-fill"></i>
+			<i class="bi bi-star"></i>
+		</div>
+		</div>
+	</div>
+	</div>
+</div>
 </section>
 <!-- Section: Rejoignez la communauté -->
 <section class="py-5 text-center bg-light border-top">
-  <div class="container">
-    <h2 class="fw-bold mb-3">Rejoignez la communauté <span class="text-gradient">Lyoum Ferhek</span></h2>
-    <p class="mb-4 text-muted">
-      Des centaines de clients et prestataires nous font déjà confiance pour leurs événements spéciaux. Pourquoi pas vous ?
-    </p>
-    <a href="{% url 'client_register' %}" class="btn btn-primary-custom d-inline-flex align-items-center gap-2 px-4 py-2">
-      <i class="bi bi-person-plus-fill"></i>
-      Créer un compte
-    </a>
-  </div>
+<div class="container">
+	<h2 class="fw-bold mb-3">Rejoignez la communauté <span class="text-gradient">Lyoum Ferhek</span></h2>
+	<p class="mb-4 text-muted">
+	Des centaines de clients et prestataires nous font déjà confiance pour leurs événements spéciaux. Pourquoi pas vous ?
+	</p>
+	<a href="{% url 'client_register' %}" class="btn btn-primary-custom d-inline-flex align-items-center gap-2 px-4 py-2">
+	<i class="bi bi-person-plus-fill"></i>
+	Créer un compte
+	</a>
+</div>
 </section>
 <!-- Footer -->
 <footer class="bg-dark text-white pt-5 pb-3 mt-5">
-  <div class="container text-center">
-    <h5 class="fw-bold mb-3">Lyoum <span class="text-gradient">Ferhek</span></h5>
-    <p class="mb-2">Votre partenaire pour organiser des moments inoubliables</p>
-    <div class="mb-3">
-      <a href="#" class="text-white me-3 text-decoration-none">Politique de confidentialité</a>
-      <a href="#" class="text-white text-decoration-none">Contact</a>
-    </div>
-    <p class="mb-0 small text-muted">&copy; 2025 Lyoum Ferhek. Tous droits réservés.</p>
-  </div>
+<div class="container text-center">
+	<h5 class="fw-bold mb-3">Lyoum <span class="text-gradient">Ferhek</span></h5>
+	<p class="mb-2">Votre partenaire pour organiser des moments inoubliables</p>
+	<div class="mb-3">
+	<a href="#" class="text-white me-3 text-decoration-none">Politique de confidentialité</a>
+	<a href="#" class="text-white text-decoration-none">Contact</a>
+	</div>
+	<p class="mb-0 small text-muted">&copy; 2025 Lyoum Ferhek. Tous droits réservés.</p>
+</div>
 </footer>
 <!-- Modal: Créer un compte client -->
 <div class="modal fade" id="clientRegisterModal" tabindex="-1" aria-labelledby="clientRegisterModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body" id="clientRegisterContent">
-        <!-- سيتم تحميل الفورم هنا عبر AJAX -->
-      </div>
-    </div>
-  </div>
+<div class="modal-dialog modal-dialog-centered">
+	<div class="modal-content">
+	<div class="modal-body" id="clientRegisterContent">
+		<!-- سيتم تحميل الفورم هنا عبر AJAX -->
+	</div>
+	</div>
+</div>
 </div>
 
 
@@ -560,226 +537,183 @@
 
 
 
-  <!-- JS Bootstrap -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-document.addEventListener('DOMContentLoaded', function () {
-  const modal = document.getElementById('clientRegisterModal');
-  modal.addEventListener('show.bs.modal', function () {
-    fetch("{% url 'client_register' %}")
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('clientRegisterContent').innerHTML = html;
-      });
-  });
+<!-- JS Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		const modal = document.getElementById('clientRegisterModal');
+		modal.addEventListener('show.bs.modal', function () {
+			fetch("{% url 'client_register' %}")
+			.then(response => response.text())
+			.then(html => {
+				document.getElementById('clientRegisterContent').innerHTML = html;
+			});
+		});
+	});
+</script>
+<script>
+	// دالة للحصول على الـ CSRF token من الكوكيز
+	function getCookie(name) {
+		let cookieValue = null;
+		if (document.cookie && document.cookie !== '') {
+		const cookies = document.cookie.split(';');
+		for (let i = 0; i < cookies.length; i++) {
+			const cookie = cookies[i].trim();
+			if (cookie.substring(0, name.length + 1) === (name + '=')) {
+			cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+			break;
+			}
+		}
+		}
+		return cookieValue;
+	}
+
+	const csrftoken = getCookie('csrftoken');
+
+	// تحميل نموذج تسجيل الزبون عند فتح الـ Modal
+	document.addEventListener('DOMContentLoaded', function () {
+		const modal = document.getElementById('clientRegisterModal');
+		modal.addEventListener('show.bs.modal', function () {
+		fetch("{% url 'client_register' %}", {
+			method: 'GET',
+			headers: {
+			'X-CSRFToken': csrftoken  // تم إضافة الـ CSRF هنا
+			}
+		})
+		.then(response => {
+			if (!response.ok) throw new Error('Erreur de chargement du formulaire.');
+			return response.text();
+		})
+		.then(html => {
+			document.getElementById('clientRegisterContent').innerHTML = html;
+		})
+		.catch(error => {
+			document.getElementById('clientRegisterContent').innerHTML =
+			"<p class='text-danger'>Une erreur s'est produite. Veuillez réessayer plus tard.</p>";
+		});
+		});
+	});
+</script>
+<script>
+document.querySelector('select[name="wilaya"]').addEventListener('change', function () {
+	const wilayaId = this.value;
+	const communeSelect = document.querySelector('select[name="commune"]');
+
+	// تفريغ البلديات القديمة
+	communeSelect.innerHTML = '<option value="">Chargement...</option>';
+
+	fetch(`/get_communes/?wilaya_id=${wilayaId}`)
+	.then(response => response.json())
+	.then(data => {
+		communeSelect.innerHTML = '<option value="">Commune</option>';
+		data.forEach(commune => {
+		communeSelect.innerHTML += `<option value="${commune.id}">${commune.name_ar}</option>`;
+		});
+	})
+	.catch(error => {
+		communeSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+	});
 });
 </script>
 <script>
-  // دالة للحصول على الـ CSRF token من الكوكيز
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  }
+document.addEventListener('DOMContentLoaded', function () {
+	const wilayaSelect = document.querySelector('select[name="wilaya"]');
+	const communeSelect = document.querySelector('select[name="commune"]');
 
-  const csrftoken = getCookie('csrftoken');
+	wilayaSelect.addEventListener('change', function () {
+	const wilayaId = this.value;
 
-  // تحميل نموذج تسجيل الزبون عند فتح الـ Modal
-  document.addEventListener('DOMContentLoaded', function () {
-    const modal = document.getElementById('clientRegisterModal');
-    modal.addEventListener('show.bs.modal', function () {
-      fetch("{% url 'client_register' %}", {
-        method: 'GET',
-        headers: {
-          'X-CSRFToken': csrftoken  // تم إضافة الـ CSRF هنا
-        }
-      })
-      .then(response => {
-        if (!response.ok) throw new Error('Erreur de chargement du formulaire.');
-        return response.text();
-      })
-      .then(html => {
-        document.getElementById('clientRegisterContent').innerHTML = html;
-      })
-      .catch(error => {
-        document.getElementById('clientRegisterContent').innerHTML =
-          "<p class='text-danger'>Une erreur s'est produite. Veuillez réessayer plus tard.</p>";
-      });
-    });
-  });
-</script>
-<script>
-  document.querySelector('select[name="wilaya"]').addEventListener('change', function () {
-    const wilayaId = this.value;
-    const communeSelect = document.querySelector('select[name="commune"]');
+	// تنظيف قائمة البلديات القديمة
+	communeSelect.innerHTML = '<option value="">Commune</option>';
 
-    // تفريغ البلديات القديمة
-    communeSelect.innerHTML = '<option value="">Chargement...</option>';
-
-    fetch(`/get_communes/?wilaya_id=${wilayaId}`)
-      .then(response => response.json())
-      .then(data => {
-        communeSelect.innerHTML = '<option value="">Commune</option>';
-        data.forEach(commune => {
-          communeSelect.innerHTML += `<option value="${commune.id}">${commune.name_ar}</option>`;
-        });
-      })
-      .catch(error => {
-        communeSelect.innerHTML = '<option value="">Erreur de chargement</option>';
-      });
-  });
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const wilayaSelect = document.querySelector('select[name="wilaya"]');
-    const communeSelect = document.querySelector('select[name="commune"]');
-
-    wilayaSelect.addEventListener('change', function () {
-      const wilayaId = this.value;
-
-      // تنظيف قائمة البلديات القديمة
-      communeSelect.innerHTML = '<option value="">Commune</option>';
-
-      if (wilayaId) {
-        fetch(`/get_communes/?wilaya_id=${wilayaId}`)
-          .then(response => response.json())
-          .then(data => {
-            data.forEach(commune => {
-              const option = document.createElement('option');
-              option.value = commune.id;
-              option.textContent = commune.ar_name;  // ← هذا السطر هنا
-              communeSelect.appendChild(option);
-            });
-          })
-          .catch(error => {
-            console.error('Erreur lors du chargement des communes:', error);
-          });
-      }
-    });
-  });
+	if (wilayaId) {
+		fetch(`/get_communes/?wilaya_id=${wilayaId}`)
+		.then(response => response.json())
+		.then(data => {
+			data.forEach(commune => {
+			const option = document.createElement('option');
+			option.value = commune.id;
+			option.textContent = commune.ar_name;  // ← هذا السطر هنا
+			communeSelect.appendChild(option);
+			});
+		})
+		.catch(error => {
+			console.error('Erreur lors du chargement des communes:', error);
+		});
+	}
+	});
+});
 </script>
 ...
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const wilayaSelect = document.querySelector('select[name="wilaya"]');
-    const communeSelect = document.querySelector('select[name="commune"]');
+document.addEventListener('DOMContentLoaded', function () {
+	const wilayaSelect = document.querySelector('select[name="wilaya"]');
+	const communeSelect = document.querySelector('select[name="commune"]');
 
-    wilayaSelect.addEventListener('change', function () {
-      const wilayaId = this.value;
+	wilayaSelect.addEventListener('change', function () {
+	const wilayaId = this.value;
 
-      // تنظيف قائمة البلديات القديمة
-      communeSelect.innerHTML = '<option value="">Commune</option>';
+	// تنظيف قائمة البلديات القديمة
+	communeSelect.innerHTML = '<option value="">Commune</option>';
 
-      if (wilayaId) {
-        fetch(`/get_communes/?wilaya_id=${wilayaId}`)
-          .then(response => response.json())
-          .then(data => {
-            data.forEach(commune => {
-              const option = document.createElement('option');
-              option.value = commune.id;
-              option.textContent = commune.ar_name;  // ✅ التعديل هنا
-              communeSelect.appendChild(option);
-            });
-          })
-          .catch(error => {
-            console.error('Erreur lors du chargement des communes:', error);
-          });
-      }
-    });
-  });
+	if (wilayaId) {
+		fetch(`/get_communes/?wilaya_id=${wilayaId}`)
+		.then(response => response.json())
+		.then(data => {
+			data.forEach(commune => {
+			const option = document.createElement('option');
+			option.value = commune.id;
+			option.textContent = commune.ar_name;  // ✅ التعديل هنا
+			communeSelect.appendChild(option);
+			});
+		})
+		.catch(error => {
+			console.error('Erreur lors du chargement des communes:', error);
+		});
+	}
+	});
+});
 </script>
 ...
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const wilayaSelect = document.querySelector('select[name="wilaya"]');
-    const communeSelect = document.querySelector('select[name="commune"]');
+	document.addEventListener('DOMContentLoaded', function () {
+		const wilayaSelect = document.querySelector('select[name="wilaya"]');
+		const communeSelect = document.querySelector('select[name="commune"]');
 
-    wilayaSelect.addEventListener('change', function () {
-      const wilayaId = this.value;
+		wilayaSelect.addEventListener('change', function () {
+		const wilayaId = this.value;
 
-      // تنظيف قائمة البلديات القديمة
-      communeSelect.innerHTML = '<option value="">Commune</option>';
+		// تنظيف قائمة البلديات القديمة
+		communeSelect.innerHTML = '<option value="">Commune</option>';
 
-      if (wilayaId) {
-        fetch(`/get_communes/?wilaya_id=${wilayaId}`)
-          .then(response => response.json())
-          .then(data => {
-            data.forEach(commune => {
-              const option = document.createElement('option');
-              option.value = commune.id;
-              option.textContent = commune.ar_name;  // ✅ التعديل هنا
-              communeSelect.appendChild(option);
-            });
-          })
-          .catch(error => {
-            console.error('Erreur lors du chargement des communes:', error);
-          });
-      }
-    });
-  });
-</script>
-<script src="{% static 'js/register_prestataire.js' %}"></script>
-
-
-
+		if (wilayaId) {
+			fetch(`/get_communes/?wilaya_id=${wilayaId}`)
+			.then(response => response.json())
+			.then(data => {
+				data.forEach(commune => {
+				const option = document.createElement('option');
+				option.value = commune.id;
+				option.textContent = commune.ar_name;  // ✅ التعديل هنا
+				communeSelect.appendChild(option);
+				});
+			})
+			.catch(error => {
+				console.error('Erreur lors du chargement des communes:', error);
+			});
+		}
+		});
+	});
 </script>
 
 
+
+
+
+<script src="https://unpkg.com/htmx.org@1.9.2"></script>
 
 </body>
-<!-- داخل الصفحة الرئيسية -->
-<form id="service-search-form">
-  <!-- نوع الفعالية -->
-  <select name="event_type" id="event-type" hx-get="/search/update/" hx-target="#search-results" hx-trigger="change">
-    <option value="">نوع الفعالية</option>
-    {% for event_type in event_types %}
-      <option value="{{ event_type.id }}">{{ event_type.name_ar }}</option>
-    {% endfor %}
-  </select>
 
-  <!-- نوع الخدمة -->
-  <select name="service_category" id="service-category" hx-get="/search/update/" hx-target="#search-results" hx-trigger="change">
-    <option value="">نوع الخدمة</option>
-    {% for cat in service_categories %}
-      <option value="{{ cat.id }}">{{ cat.name_ar }}</option>
-    {% endfor %}
-  </select>
 
-  <!-- الولاية -->
-  <select name="wilaya" id="wilaya" 
-          hx-get="/get-communes/" 
-          hx-target="#commune" 
-          hx-trigger="change">
-    <option value="">اختر الولاية</option>
-    {% for wilaya in wilayas %}
-      <option value="{{ wilaya.id }}">{{ wilaya.name_ar }}</option>
-    {% endfor %}
-  </select>
-
-  <!-- البلدية -->
-  <select name="commune" id="commune" 
-          hx-get="/search/update/" 
-          hx-target="#search-results" 
-          hx-trigger="change">
-    <option value="">اختر البلدية</option>
-    <!-- يتم تعبئة البلديات حسب الولاية -->
-  </select>
-</form>
-
-<!-- مكان عرض النتائج -->
-<div id="search-results">
-  <!-- هنا تُعرض الخدمات بعد البحث -->
-</div>
-<script src="https://unpkg.com/htmx.org@1.9.2"></script>
 
 
 </html>

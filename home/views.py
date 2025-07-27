@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from apps.users.forms import AuthenticationForm
 from apps.wilayas.models import Wilaya, Commune
 from apps.events.models import EventType
 from apps.services.models import ServiceCategory
@@ -21,6 +22,7 @@ def home_view(request):
     context = {
         'wilayas': wilayas,
         'communes': communes,
+        'prestataire_login_form' :  AuthenticationForm
     }
     return render(request, 'home/index.html', context)
 
