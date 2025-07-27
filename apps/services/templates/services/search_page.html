@@ -1,0 +1,80 @@
+<!-- templates/services/search_page.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>البحث عن خدمات</title>
+  <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <section class="container py-5">
+    <div class="text-center mb-4">
+      <h1>ابحث عن الخدمات لمناسبتك</h1>
+      <p class="lead">اختر نوع المناسبة، نوع الخدمة، والموقع الجغرافي</p>
+    </div>
+
+    <form id="service-search-form"
+          class="row g-3"
+          hx-get="{% url 'filter_services' %}"
+          hx-target="#search-results"
+          hx-trigger="change from:select">
+
+      <div class="col-md-3">
+        <select class="form-select" name="event_type">
+          <option value="">نوع المناسبة</option>
+          {% for et in event_types %}
+            <option value="{{ et.id }}">{{ et.name_ar }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <select class="form-select" name="category">
+          <option value="">نوع الخدمة</option>
+          {% for cat in categories %}
+            <option value="{{ cat.id }}">{{ cat.name_ar }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <select class="form-select" name="wilaya" id="wilaya-select">
+          <option value="">اختر الولاية</option>
+          {% for w in wilayas %}
+            <option value="{{ w.id }}">{{ w.name_ar }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <select class="form-select" name="commune" id="commune-select">
+          <option value="">اختر البلدية</option>
+        </select>
+      </div>
+    </form>
+
+    <div id="search-results" class="mt-4">
+      <!-- نتائج البحث ستُعرض هنا -->
+    </div>
+  </section>
+
+  <script>
+    // جلب البلديات عند تغيير الولاية
+    document.getElementById("wilaya-select").addEventListener("change", function () {
+      const wilayaId = this.value;
+      fetch(`/api/communes/?wilaya_id=${wilayaId}`)
+        .then(response => response.json())
+        .then(data => {
+          const communeSelect = document.getElementById("commune-select");
+          communeSelect.innerHTML = '<option value="">اختر البلدية</option>';
+          data.forEach(c => {
+            communeSelect.innerHTML += `<option value="${c.id}">${c.name_ar}</option>`;
+          });
+        });
+    });
+  </script>
+</body>
+</html>

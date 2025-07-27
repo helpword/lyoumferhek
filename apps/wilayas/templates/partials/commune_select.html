@@ -1,0 +1,4 @@
+<option value="">اختر البلدية</option>
+{% for commune in communes %}
+  <option value="{{ commune.id }}">{{ commune.name_ar }}</option>
+{% endfor %}

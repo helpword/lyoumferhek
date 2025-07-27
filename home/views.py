@@ -1,6 +1,19 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from apps.wilayas.models import Wilaya, Commune
+from apps.events.models import EventType
+from apps.services.models import ServiceCategory
+
+def index(request):
+    wilayas = Wilaya.objects.all()
+    event_types = EventType.objects.all()
+    service_categories = ServiceCategory.objects.all()
+
+    return render(request, "index.html", {
+        "wilayas": wilayas,
+        "event_types": event_types,
+        "service_categories": service_categories,
+    })
 
 def home_view(request):
     wilayas = Wilaya.objects.all()

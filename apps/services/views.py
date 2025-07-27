@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from apps.prestataires.models import Prestataire
-from apps.wilayas.models import Commune
+from apps.wilayas.models import Wilaya, Commune
+from apps.clients.models import Client
 from .forms import WilayaCommuneForm, Step1Form, Step2Form, Step3Form, Step4Form
 from apps.events.models import Reservation
 from .models import Service
 from apps.services.models import ServiceCategory
+from apps.events.models import EventType
 
 def register_prestataire(request):
     categories = ServiceCategory.objects.all()
@@ -95,7 +97,13 @@ def form_complete_view(request):
     return render(request, 'form/complete.html', data)
 
 
-
+def service_search_page(request):
+    context = {
+        "event_types": EventType.objects.all(),
+        "categories": ServiceCategory.objects.all(),
+        "wilayas": Wilaya.objects.all(),
+    }
+    return render(request, "services/search_page.html", context)
 
 def home(request):
     user = request.user
@@ -123,3 +131,22 @@ def home(request):
     }
 
     return render(request, 'home/index.html', context)
+
+def filter_services(request):
+    event_type = request.GET.get("event_type")
+    category = request.GET.get("category")
+    wilaya = request.GET.get("wilaya")
+    commune = request.GET.get("commune")
+
+    services = Service.objects.all()
+
+    if event_type:
+        services = services.filter(service_category__event_types__id=event_type)
+    if category:
+        services = services.filter(service_category_id=category)
+    if wilaya:
+        services = services.filter(prestataire__commune__wilaya_id=wilaya)
+    if commune:
+        services = services.filter(prestataire__commune_id=commune)
+
+    return render(request, "services/partials/service_list.html", {"services": services})

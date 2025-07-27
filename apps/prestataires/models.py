@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from apps.wilayas.models import Wilaya, Commune
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
+
+
 
 
 User = get_user_model()
@@ -53,9 +56,9 @@ class ServiceType(models.Model):
 
 class Review(models.Model):
     prestataire = models.ForeignKey("prestataires.Prestataire", on_delete=models.CASCADE, related_name="reviews")
-    rating = models.PositiveSmallIntegerField()  # 1 إلى 5
+    rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.rating} ⭐ - {self.prestataire.name_fr}"      
+        return f"{self.rating} ⭐ by {self.prestataire.name_fr} on {self.created_at.date()}"      

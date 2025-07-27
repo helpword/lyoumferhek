@@ -57,6 +57,10 @@ INSTALLED_APPS = [
     'apps.prestataires',
     'apps.services',
     'apps.wilayas',
+    'apps.orders',
+    'apps.reviews',
+    
+
 
     # External packages
     "debug_toolbar",
@@ -168,7 +172,7 @@ STATICFILES_DIRS = [
 ]
 
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/client/dashboard/'  # أو حسب ما تريده
+LOGIN_REDIRECT_URL = '/client/dashboard/' , '/prestataires/dashboard/' # أو حسب ما تريده
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',

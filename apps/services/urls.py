@@ -13,4 +13,6 @@ urlpatterns = [
     path('ajax/load-communes/', views.load_communes, name='ajax_load_communes'),
     path('ajax/get-services/', views.get_services_by_category, name='get_services_by_category'),
     path('ajax/get-services/', views.ajax_load_services, name='ajax_load_services'),
+    path("search/", views.service_search_page, name="service_search_page"),
+    path("filter/", views.filter_services, name="filter_services"),
 ]

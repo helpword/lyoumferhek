@@ -3,6 +3,14 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from apps.prestataires.models import Prestataire
 from apps.wilayas.models import Wilaya, Commune
+from django import forms
+from .models import Prestataire
+
+class PrestataireUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Prestataire
+        fields = ['phone', 'service_type', 'wilaya', 'commune']
+
 
 User = get_user_model()
 

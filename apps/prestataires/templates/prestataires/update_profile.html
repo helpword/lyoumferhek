@@ -1,0 +1,9 @@
+
+{% block content %}
+<h2>تعديل الملف الشخصي</h2>
+<form method="post">
+  {% csrf_token %}
+  <!-- أضف الحقول لاحقاً -->
+  <button type="submit">حفظ التعديلات</button>
+</form>
+{% endblock %} 

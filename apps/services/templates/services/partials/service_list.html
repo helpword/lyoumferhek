@@ -1,0 +1,22 @@
+<!-- templates/services/partials/service_list.html -->
+{% if services %}
+  <div class="row">
+    {% for service in services %}
+      <div class="col-md-4 mb-3">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">{{ service.name }}</h5>
+            <p class="card-text">
+              {{ service.description|truncatewords:15 }}
+            </p>
+            <p class="text-muted">
+              مقدم الخدمة: {{ service.prestataire.user.full_name }}
+            </p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-warning">لا توجد خدمات مطابقة لبحثك.</div>
+{% endif %}

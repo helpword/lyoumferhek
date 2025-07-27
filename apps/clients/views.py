@@ -11,6 +11,7 @@ from apps.wilayas.models import Wilaya, Commune
 from apps.events.models import Event, Reservation  # أو المسار الصحيح للموديل
 from django.contrib.auth import logout
 from django.template.loader import render_to_string
+from apps.reviews.models import Review
 
 
 
@@ -117,32 +118,34 @@ def client_register_view(request):
     return render(request, 'clients/register.html', {'form': form})
 
 
-def search_services(request):
+def service_search_page(request):
     wilayas = Wilaya.objects.all()
     communes = Commune.objects.all()
     categories = ServiceCategory.objects.all()
+    return render(request, 'clients/service_search.html', {
+        'wilayas': wilayas,
+        'communes': communes,
+        'categories': categories,
+    })
 
-    services = Service.objects.all()
 
+def filter_services(request):
     wilaya_id = request.GET.get('wilaya')
     commune_id = request.GET.get('commune')
     category_id = request.GET.get('category')
 
+    services = Service.objects.all()
+
     if wilaya_id:
-        services = services.filter(commune__wilaya_id=wilaya_id)
-        communes = Commune.objects.filter(wilaya_id=wilaya_id)  # لتحديث القائمة
+        services = services.filter(prestataire__commune__wilaya_id=wilaya_id)
+
     if commune_id:
-        services = services.filter(commune_id=commune_id)
+        services = services.filter(prestataire__commune_id=commune_id)
+
     if category_id:
         services = services.filter(category_id=category_id)
 
-    return render(request, 'client/search.html', {
-        'wilayas': wilayas,
-        'communes': communes,
-        'categories': categories,
-        'services': services
-    })
-
+    return render(request, 'clients/partials/service_results.html', {'services': services})
 
 # def client_dashboard(request):
 #     user = request.user

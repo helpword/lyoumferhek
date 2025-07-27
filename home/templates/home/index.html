@@ -250,8 +250,8 @@
       <div class="modal-body">
 
         <!-- FORMULAIRE DE CONNEXION -->
-        <form method="POST" action="{% url 'prestataire_login' %}">    
-
+        <form method="POST" action="{% url 'prestataire_login' %}">
+  
           {% csrf_token %}
           <div class="mb-3">
             <label class="form-label">Adresse E-mail</label>
@@ -736,4 +736,50 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 </body>
+<!-- داخل الصفحة الرئيسية -->
+<form id="service-search-form">
+  <!-- نوع الفعالية -->
+  <select name="event_type" id="event-type" hx-get="/search/update/" hx-target="#search-results" hx-trigger="change">
+    <option value="">نوع الفعالية</option>
+    {% for event_type in event_types %}
+      <option value="{{ event_type.id }}">{{ event_type.name_ar }}</option>
+    {% endfor %}
+  </select>
+
+  <!-- نوع الخدمة -->
+  <select name="service_category" id="service-category" hx-get="/search/update/" hx-target="#search-results" hx-trigger="change">
+    <option value="">نوع الخدمة</option>
+    {% for cat in service_categories %}
+      <option value="{{ cat.id }}">{{ cat.name_ar }}</option>
+    {% endfor %}
+  </select>
+
+  <!-- الولاية -->
+  <select name="wilaya" id="wilaya" 
+          hx-get="/get-communes/" 
+          hx-target="#commune" 
+          hx-trigger="change">
+    <option value="">اختر الولاية</option>
+    {% for wilaya in wilayas %}
+      <option value="{{ wilaya.id }}">{{ wilaya.name_ar }}</option>
+    {% endfor %}
+  </select>
+
+  <!-- البلدية -->
+  <select name="commune" id="commune" 
+          hx-get="/search/update/" 
+          hx-target="#search-results" 
+          hx-trigger="change">
+    <option value="">اختر البلدية</option>
+    <!-- يتم تعبئة البلديات حسب الولاية -->
+  </select>
+</form>
+
+<!-- مكان عرض النتائج -->
+<div id="search-results">
+  <!-- هنا تُعرض الخدمات بعد البحث -->
+</div>
+<script src="https://unpkg.com/htmx.org@1.9.2"></script>
+
+
 </html>

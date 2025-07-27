@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Prestataire
+from apps.prestataires.models import Prestataire
 from django.shortcuts import render, redirect
 from .forms import PrestataireRegisterForm
 from django.contrib.auth import authenticate, login
@@ -10,6 +10,15 @@ from django.http import JsonResponse
 from django.urls import reverse
 import json
 from django.utils.safestring import mark_safe
+from apps.orders.models import Order  # حسب مكان Model الحجوزات
+from apps.services.models import Service
+from apps.reviews.models import Review  # إذا كنت تستخدم تقييمات وتعليقات
+from django.utils.timezone import now
+from datetime import timedelta
+from apps.prestataires.forms import PrestataireUpdateForm
+from django.http import Http404
+
+
 
 
 def prestataire_login_view(request):
@@ -36,35 +45,51 @@ def prestataire_login_view(request):
 # عرض صفحة تفاصيل مقدم خدمة
 def prestataire_detail(request, pk):
     prestataire = get_object_or_404(Prestataire, pk=pk)
+    reviews = Review.objects.filter(prestataire=prestataire)
+    average_rating = reviews.aggregate(models.Avg('rating'))['rating__avg']
+
     return render(request, 'prestataire/prestataire_detail.html', {'prestataire': prestataire})
 
 # عرض لوحة التحكم الخاصة بمقدم الخدمة
 @login_required
 def prestataire_dashboard(request):
     user = request.user
+
     if hasattr(user, 'prestataire_profile'):
         prestataire = user.prestataire_profile
-        commandes = prestataire.orders.all()
-        reviews = prestataire.reviews.all()  # تأكد أن لديك علاقة reviews في الموديل
 
-        # تحويل التقييمات إلى JSON للرسم البياني
+        commandes = prestataire.orders.all()
+        reviews = prestataire.reviews.all()
+
+        total_orders = commandes.count()
+        confirmed_orders = commandes.filter(status='confirmed').count()
+        pending_orders = commandes.filter(status='pending').count()
+        cancelled_orders = commandes.filter(status='cancelled').count()
+
+        latest_orders = commandes.order_by('-date')[:5]
+        total_services = Service.objects.filter(prestataire=prestataire).count()
+        recent_reviews = Review.objects.filter(prestataire=prestataire).order_by('-created_at')[:3]
+
         ratings = [review.rating for review in reviews]
         ratings_json = mark_safe(json.dumps(ratings))
 
-        # جلب عدد الطلبات (افتراضًا لديك Order مرتبط بـ Prestataire)
-        commandes = prestataire.orders.all() 
         return render(request, 'prestataires/dashboard.html', {
             'prestataire': prestataire,
+            'total_orders': total_orders,
+            'confirmed_orders': confirmed_orders,
+            'pending_orders': pending_orders,
+            'cancelled_orders': cancelled_orders,
+            'latest_orders': latest_orders,
+            'total_services': total_services,
+            'recent_reviews': recent_reviews,
             'reviews': reviews,
             'ratings_json': ratings_json,
-            'commandes': commandes
+            'commandes': commandes,
         })
-    else:
-        return render(request, 'errors/unauthorized.html')
-    
-    
-    # أو أي صفحة خطأ عندك
-    
+
+    return redirect('home')
+
+
 
 
 def prestataire_register_view(request):
@@ -95,7 +120,39 @@ def prestataire_register_view(request):
 
 
 
+@login_required
+def update_profile(request):
+    try:
+        prestataire = request.user.prestataire_profile
+    except Prestataire.DoesNotExist:
+        raise Http404("ملف مقدم الخدمة غير موجود")
+
+    if request.method == 'POST':
+        form = PrestataireUpdateForm(request.POST, request.FILES, instance=prestataire)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "تم تحديث الملف الشخصي بنجاح.")
+            return redirect('prestataire_dashboard')
+    else:
+        form = PrestataireUpdateForm(instance=prestataire)
+
+    return render(request, 'prestataires/update_profile.html', {'form': form})
 
 
+@login_required
+def add_service(request):
+    return render(request, 'prestataires/add_service.html')
 
+@login_required
+def my_services(request):
+    return render(request, 'prestataires/my_services.html')
 
+@login_required
+def calendar_view(request):
+    return render(request, 'prestataires/calendar.html')
+@login_required
+def inbox_view(request):
+    return render(request, 'prestataires/inbox.html')
+@login_required
+def update_profile_view(request):
+    return render(request, 'prestataires/update_profile.html')

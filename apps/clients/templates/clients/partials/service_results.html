@@ -1,0 +1,16 @@
+{% if services %}
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {% for service in services %}
+      <div class="bg-white p-4 rounded shadow">
+        <h2 class="text-xl font-semibold">{{ service.name }}</h2>
+        <p>{{ service.description|truncatechars:100 }}</p>
+        <p class="text-sm text-gray-500 mt-2">
+          مقدم الخدمة: {{ service.prestataire.user.first_name }}<br>
+          الموقع: {{ service.prestataire.commune.name_ar }}
+        </p>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="text-center text-gray-500">لا توجد خدمات مطابقة للبحث.</p>
+{% endif %}
