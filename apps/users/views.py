@@ -54,13 +54,16 @@ class LoginView(DjangoLoginView):
     
     def form_valid(self, form):
         """Security check complete. Log the user in."""
-        auth_login(self.request, form.get_user())
+        user = auth_login(self.request, form.get_user())
+        if user is not None and user.is_prestataire:
+            return redirect('prestataires:prestataire_dashboard') 
         user_language = self.request.user.language or "fr"
         print('user_language>>>>>>>', user_language)
         translation.activate(user_language)
         response = HttpResponseRedirect(self.get_success_url())
         response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
         return response
+
 
 
 def set_language(request, language="fr"):

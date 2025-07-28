@@ -250,7 +250,7 @@
       <div class="modal-body">
 
         <!-- FORMULAIRE DE CONNEXION -->
-        <form method="POST" action="{% url 'prestataire_login' %}">
+        <form method="POST" action="{% url 'users:login' %}">
   
           {% csrf_token %}
           <div class="mb-3">
@@ -265,7 +265,7 @@
         </form>
 
         <div class="text-center mt-3">
-          <a href="{% url 'prestataire_register' %}" class="text-decoration-none">Créer un compte prestataire</a>
+          <a href="{% url 'prestataires:prestataire_register' %}" class="text-decoration-none">Créer un compte prestataire</a>
         </div>
 
         <div class="text-center mt-3">

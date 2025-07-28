@@ -21,17 +21,17 @@ from django.http import Http404
 
 
 
-def prestataire_login_view(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        user = authenticate(request, email=email, password=password)
-        if user is not None and user.is_prestataire:
-            login(request, user)
-            return redirect('prestataire_dashboard')  # تأكد أن هذه الصفحة موجودة
-        else:
-            messages.error(request, 'Adresse e-mail ou mot de passe invalide.')
-    return render(request, 'prestataires/dashboard.html')
+# def prestataire_login_view(request):
+#     if request.method == 'POST':
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
+#         user = authenticate(request, email=email, password=password)
+#         if user is not None and user.is_prestataire:
+#             login(request, user)
+#             return redirect('prestataires:prestataire_dashboard')  # تأكد أن هذه الصفحة موجودة
+#         else:
+#             messages.error(request, 'Adresse e-mail ou mot de passe invalide.')
+#     return render(request, 'prestataires/dashboard.html')
 
 
 # def prestataire_register_view(request):
@@ -101,8 +101,8 @@ def prestataire_register_view(request):
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, user)
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({'success': True, 'redirect_url': reverse('prestataire_dashboard')})
-            return redirect('prestataire_dashboard')
+                return JsonResponse({'success': True, 'redirect_url': reverse('prestataires:prestataire_dashboard')})
+            return redirect('prestataires:prestataire_dashboard')
         else:
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 html = render_to_string('prestataires/register.html', {'form': form}, request=request)
@@ -132,7 +132,7 @@ def update_profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, "تم تحديث الملف الشخصي بنجاح.")
-            return redirect('prestataire_dashboard')
+            return redirect('prestataires:prestataire_dashboard')
     else:
         form = PrestataireUpdateForm(instance=prestataire)
 
